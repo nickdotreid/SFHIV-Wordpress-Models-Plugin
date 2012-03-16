@@ -42,4 +42,36 @@ function sfhiv_create_group_categories() {
   ));
 }
 
+add_action( 'wp_loaded', 'sfhiv_group_connection_types' );
+function sfhiv_group_connection_types() {
+	// Make sure the Posts 2 Posts plugin is active.
+	if ( !function_exists( 'p2p_register_connection_type' ) )
+		return;
+		
+	p2p_register_connection_type( array(
+		'name' => 'group_events',
+		'from' => 'sfhiv_group',
+		'to' => 'event',
+	));
+
+	p2p_register_connection_type( array(
+		'name' => 'group_services',
+		'from' => 'sfhiv_group',
+		'to' => 'sfhiv_service',
+	));
+
+	p2p_register_connection_type( array(
+		'name' => 'group_members',
+		'from' => 'sfhiv_group',
+		'to' => 'user',
+		'fields' => array(
+				'title' => 'Title',
+				'incomplete' => array(
+					'title' => 'Incomplete',
+					'type' => 'checkbox'
+				),
+			)
+	));
+}
+
 ?>
