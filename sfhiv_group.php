@@ -36,7 +36,10 @@ function sfhiv_create_group_categories() {
     'new_item_name' => __( 'New Group Category Name' ),
   ); 	
 
-  register_taxonomy('sfhiv_group_category',array('sfhiv_group'),array(
+  register_taxonomy('sfhiv_group_category',array(
+	'sfhiv_group',
+	'event'
+	),array(
     'hierarchical' => true,
     'labels' => $labels,
   ));

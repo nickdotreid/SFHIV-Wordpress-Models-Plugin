@@ -13,7 +13,11 @@ function sfhiv_create_year_tag() {
     'new_item_name' => __( 'New Year Name' ),
   ); 	
 
-  register_taxonomy('sfhiv_year',array('sfhiv_group','sfhiv_report'),array(
+  register_taxonomy('sfhiv_year',array(
+	'sfhiv_group',
+	'sfhiv_report',
+	'event'
+	),array(
     'hierarchical' => false,
     'labels' => $labels
   ));
