@@ -42,7 +42,7 @@ function sfhiv_add_service_category(){
     'new_item_name' => __( 'New Group Service Name' ),
   ); 	
 
-  register_taxonomy('service_category',array('service'),array(
+  register_taxonomy('service_category',array('sfhiv_service'),array(
     'hierarchical' => true,
     'labels' => $labels,
   ));
@@ -63,7 +63,10 @@ function sfhiv_add_population_tag(){
     'new_item_name' => __( 'New Group Population Name' ),
   ); 	
 
-  register_taxonomy('population_category',array('group','event','report','service'),array(
+  register_taxonomy('sfhiv_population_category',array(
+	'sfhiv_service'
+	),
+	array(
     'hierarchical' => true,
     'labels' => $labels,
   ));
