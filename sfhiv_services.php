@@ -73,7 +73,7 @@ function sfhiv_add_population_tag(){
 }
 
 function sfhiv_add_services_meta_boxes(){
-	add_meta_box( 'sfhiv_services_hours', 'Hours of Operation', 'sfhiv_services_hours_op_meta', 'service', 'normal' );
+	
 }
 
 function sfhiv_services_hours_op_meta($post){
