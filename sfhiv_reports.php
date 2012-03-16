@@ -40,6 +40,7 @@ function sfhiv_create_report_categories() {
     'hierarchical' => true,
     'labels' => $labels,
   ));
+}
 
 
 ?>
