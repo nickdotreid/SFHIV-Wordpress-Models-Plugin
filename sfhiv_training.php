@@ -10,13 +10,13 @@ function sfhiv_add_trainings_type(){
 			),
 		'public' => true,
 		'has_archive' => true,
-		'hierarchical' => true,
+		'hierarchical' => false,
 		'rewrite' => array(
 			'slug' => 'trainings',
 			'feeds' => false,
 		),
-		'capability_type' => 'page',
-		'supports' => array('title','author','editor','excerpt','thumbnail','page-attributes'),
+		'capability_type' => 'post',
+		'supports' => array('title','editor','excerpt','page-attributes'),
 		'taxonomies' => array('service_category'),
 		)
 	);
