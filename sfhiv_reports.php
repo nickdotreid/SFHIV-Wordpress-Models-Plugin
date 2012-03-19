@@ -36,7 +36,7 @@ function sfhiv_create_report_categories() {
     'new_item_name' => __( 'New Group Report Name' ),
   ); 	
 
-  register_taxonomy('sfhiv_eport_category',array('sfhiv_report'),array(
+  register_taxonomy('sfhiv_report_category',array('sfhiv_report'),array(
     'hierarchical' => true,
     'labels' => $labels,
   ));
