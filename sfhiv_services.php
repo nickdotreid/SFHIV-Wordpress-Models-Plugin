@@ -20,11 +20,13 @@ function sfhiv_add_services_type(){
 		)
 	);
 	add_post_type_support( 'sfhiv_service', 'excerpt' );
+	/*
 	p2p_register_connection_type( array(
 		'name' => 'service_location',
 		'from' => 'sfhiv_service',
 		'to' => 'location',
 	) );
+	*/
 }
 
 add_action('init','sfhiv_add_service_category');
