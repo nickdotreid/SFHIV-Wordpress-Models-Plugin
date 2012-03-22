@@ -15,17 +15,13 @@ function sfhiv_add_services_type(){
 			'feeds' => false,
 		),
 		'hierarchical' => true,
-		'taxonomies' => array('catagories'),
+		'taxonomies' => array(),
 		'register_meta_box_cb' => 'sfhiv_add_services_meta_boxes',
 		)
 	);
 	add_post_type_support( 'sfhiv_service', 'excerpt' );
 	/*
-	p2p_register_connection_type( array(
-		'name' => 'service_location',
-		'from' => 'sfhiv_service',
-		'to' => 'location',
-	) );
+
 	*/
 }
 
@@ -75,7 +71,39 @@ function sfhiv_add_population_tag(){
 }
 
 function sfhiv_add_services_meta_boxes(){
-	
+
+}
+
+add_action('init','sfhiv_add_service_hours_type');
+function sfhiv_add_service_hours_type(){
+	register_post_type( 'sfhiv_service_hour',
+		array(
+			'labels' => array(
+				'name' => __( 'Service Times' ),
+				'singular_name' => __( 'Service Time' )
+			),
+		'public' => true,
+		'has_archive' => false,
+		'show_in_menu' => 'edit.php?post_type=sfhiv_service',
+		'rewrite' => array(
+			'slug' => 'services',
+			'feeds' => false,
+		),
+		'hierarchical' => false,
+		'taxonomies' => array('sfhiv_service_category','sfhiv_population_category'),
+		'supports' => array('title'),
+		'register_meta_box_cb' => 'sfhiv_add_service_hours_meta_boxes',
+		)
+	);
+	p2p_register_connection_type( array(
+		'name' => 'service_time',
+		'from' => 'sfhiv_service',
+		'to' => 'sfhiv_service_hour',
+	) );
+}
+
+function sfhiv_add_service_hours_meta_boxes(){
+	add_meta_box( 'service_hours_time', 'Service Time', 'sfhiv_services_hours_op_meta', 'sfhiv_service_hour' );	
 }
 
 function sfhiv_services_hours_op_meta($post){
@@ -128,12 +156,6 @@ function sfhiv_services_hours_op_meta($post){
 			<label for="hours_end">End Time</label>
 			<input id="hours_end" type="text" name="hours[end]" value="<?=$end;?>" />
 		</fieldset>
-		<fieldset>
-			<legend>Appointment</legend>
-			<label class="radio"><input type="radio" name="hours[appointment]" value="" />No Appointment</label>
-			<label class="radio"><input type="radio" name="hours[appointment]" value="recommended" />Appointment Recommended</label>
-			<label class="radio"><input type="radio" name="hours[appointment]" value="required" />Appointment Required</label>
-		</fieldset>
 	</fieldset>
 	<?
 }
@@ -142,7 +164,10 @@ add_action( 'save_post', 'sfhiv_service_hours_save' );
 function sfhiv_service_hours_save($post_ID,$post){
 
 	if(isset($_POST['hours']['day_of_week'])){
-		$days = implode(",",$_POST['hours']['day_of_week']);
+		$days = $_POST['hours']['day_of_week'];
+		if(is_array($days)){
+			$days = implode(",",$days);	
+		}
 		update_post_meta($post_ID, 'sfhiv_service_days', $days);
 	}
 	if(isset($_POST['hours']['start'])){
@@ -152,9 +177,6 @@ function sfhiv_service_hours_save($post_ID,$post){
 	if(isset($_POST['hours']['end'])){
 		$seconds = strtotime($_POST['hours']['end']);
 		update_post_meta($post_ID, 'sfhiv_service_end', $seconds);
-	}
-	if(isset($_POST['hours']['appointment'])){
-		update_post_meta($post_ID, 'sfhiv_service_appointment', $_POST['hours']['appointment']);
 	}
 }
 
