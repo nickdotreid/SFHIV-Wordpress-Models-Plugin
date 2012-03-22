@@ -10,5 +10,4 @@ require_once('sfhiv_training.php');
 require_once('sfhiv_documents.php');
 require_once('sfhiv_faq.php');
 
-
 ?>
