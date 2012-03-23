@@ -18,7 +18,8 @@ function sfhiv_add_documents_type(){
 		'capability_type' => 'post',
 		'supports' => array('title','editor','excerpt'),
 		'taxonomies' => array(
-			'service_category',
+			'sfhiv_service_category',
+			'sfhiv_population_category',
 			'sfhiv_document_category',
 			),
 		)
