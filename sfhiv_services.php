@@ -71,8 +71,79 @@ function sfhiv_add_population_tag(){
 }
 
 function sfhiv_add_services_meta_boxes(){
-
+	add_meta_box( 'service_time', 'Time', 'sfhiv_service_time_box', 'sfhiv_service' );
 }
+
+function sfhiv_service_time_box($post){
+	$service_hours = new WP_Query( array(
+		'connected_type' => 'service_time',
+		'connected_items' => $post->ID,
+	));
+	foreach($service_hours->posts as $hour){
+		sfhiv_draw_services_hours_op_meta($hour,'hours['.$hour->ID.']');
+	}
+	?><h4>Add new time and location</h4><?
+	sfhiv_draw_services_hours_op_meta($post,'hours[new]');
+}
+
+
+add_action( 'save_post', 'sfhiv_service_hour_time_save' );
+function sfhiv_service_hour_time_save($post_ID,$post){
+	if(get_post_type($post_ID) != 'sfhiv_service') return;
+	foreach($_POST['hours'] as $key=>$post_data){
+		if($key == 'new'){
+			sfhiv_create_or_update_service_hours(false,$post_data,$post_ID);
+		}else{
+			sfhiv_create_or_update_service_hours($key,$post_data,$post_ID);
+		}
+	}
+}
+
+function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_ID=false){
+	if(!$post_ID){
+		if((isset($post_data['day_of_week']) && is_array($post_data['day_of_week']) && count($post_data['day_of_week'])>0 )
+			&& (isset($post_data['start']) && $post_data['start']!='')
+			&& (isset($post_data['end']) && $post_data['end']!='')){
+			$post_ID = wp_insert_post(array(
+				'post_type' => 'sfhiv_service_hour',
+			));
+		}
+	}
+	if(!$post_ID) return false;
+	if($parent_ID){
+		$parents = new WP_Query( array(
+			'connected_type' => 'service_time',
+			'connected_items' => $post_ID,
+		));
+		$found = false;
+		foreach($parents as $parent){
+			if($parent->ID == $parent_ID) $found = true;
+		}
+		if(!$found){
+			p2p_create_connection( 'service_time', array(
+				'from' => $parent_ID,
+				'to' => $post_ID,
+			));
+		}
+	}
+	// check and save post meta
+	if(isset($post_data['day_of_week'])){
+		$days = $post_data['day_of_week'];
+		if(is_array($days)){
+			$days = implode(",",$days);	
+		}
+		update_post_meta($post_ID, 'sfhiv_service_days', $days);
+	}
+	if(isset($post_data['start'])){
+		$seconds = strtotime($post_data['start']);
+		update_post_meta($post_ID, 'sfhiv_service_start', $seconds);
+	}
+	if(isset($post_data['end'])){
+		$seconds = strtotime($post_data['end']);
+		update_post_meta($post_ID, 'sfhiv_service_end', $seconds);
+	}
+}
+
 
 add_action('init','sfhiv_add_service_hours_type');
 function sfhiv_add_service_hours_type(){
