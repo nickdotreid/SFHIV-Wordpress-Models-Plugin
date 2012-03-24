@@ -103,10 +103,14 @@ function sfhiv_add_service_hours_type(){
 }
 
 function sfhiv_add_service_hours_meta_boxes(){
-	add_meta_box( 'service_hours_time', 'Service Time', 'sfhiv_services_hours_op_meta', 'sfhiv_service_hour' );	
+	add_meta_box( 'service_hours_time', 'Service Time', 'sfhiv_services_hours_op_meta', 'sfhiv_service_hour' );
 }
 
 function sfhiv_services_hours_op_meta($post){
+	sfhiv_draw_services_hours_op_meta($post,'hours');
+}
+
+function sfhiv_draw_services_hours_op_meta($post,$form_name){
 	$days_in_week = array(
 		'Monday',
 		'Tuesday',
@@ -140,24 +144,7 @@ function sfhiv_services_hours_op_meta($post){
 	$end = date('g:i a',$end);
 	$appointment = get_post_meta($post->ID, 'sfhiv_service_appointment');
 	
-	?>
-	<fieldset>
-		<legend>Hours of Operation</legend>
-		<fieldset>
-			<legend>Days of Week</legend>
-			<?	foreach($days_in_week as $day):	?>
-			<label class="checkbox"><input type="checkbox" name="hours[day_of_week][]" value="<?=$day;?>" <?	if(in_array($day,$days)){ echo 'checked="checked"'; }	?>  /><?=$day;?></label>
-			<?	endforeach;	?>
-		</fieldset>
-		<fieldset>
-			<legend>Time</legend>
-			<label for="hours_start">Start Time</label>
-			<input id="hours_start" type="text" name="hours[start]" value="<?=$start;?>" />
-			<label for="hours_end">End Time</label>
-			<input id="hours_end" type="text" name="hours[end]" value="<?=$end;?>" />
-		</fieldset>
-	</fieldset>
-	<?
+	include 'templates/service_hours.php';
 }
 
 add_action( 'save_post', 'sfhiv_service_hours_save' );
