@@ -128,11 +128,10 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 	}
 	// check and save post meta
 	if(isset($post_data['day_of_week'])){
-		$days = $post_data['day_of_week'];
-		if(is_array($days)){
-			$days = implode(",",$days);	
+		delete_post_meta($post_ID,'sfhiv_service_days');
+		foreach($post_data['day_of_week'] as $day){
+			add_post_meta($post_ID, 'sfhiv_service_days', $day);	
 		}
-		update_post_meta($post_ID, 'sfhiv_service_days', $days);
 	}
 	if(isset($post_data['start'])){
 		$seconds = strtotime($post_data['start']);
@@ -205,37 +204,20 @@ function sfhiv_draw_services_hours_op_meta($post,$form_name){
 	}
 	$ampm = array('AM','PM');
 	
-	$days = get_post_meta($post->ID, 'sfhiv_service_days',true);
-	if($days){
-		$days = explode(",",$days);	
-	}
+	$days = get_post_meta($post->ID, 'sfhiv_service_days');
+	
 	$start = get_post_meta($post->ID, 'sfhiv_service_start',true);
 	$start = date('g:i a',$start);
+	
 	$end = get_post_meta($post->ID, 'sfhiv_service_end',true);
 	$end = date('g:i a',$end);
-	$appointment = get_post_meta($post->ID, 'sfhiv_service_appointment');
 	
 	include 'templates/service_hours.php';
 }
 
 add_action( 'save_post', 'sfhiv_service_hours_save' );
 function sfhiv_service_hours_save($post_ID,$post){
-
-	if(isset($_POST['hours']['day_of_week'])){
-		$days = $_POST['hours']['day_of_week'];
-		if(is_array($days)){
-			$days = implode(",",$days);	
-		}
-		update_post_meta($post_ID, 'sfhiv_service_days', $days);
-	}
-	if(isset($_POST['hours']['start'])){
-		$seconds = strtotime($_POST['hours']['start']);
-		update_post_meta($post_ID, 'sfhiv_service_start', $seconds);
-	}
-	if(isset($_POST['hours']['end'])){
-		$seconds = strtotime($_POST['hours']['end']);
-		update_post_meta($post_ID, 'sfhiv_service_end', $seconds);
-	}
+	sfhiv_create_or_update_service_hours($post_ID,$_POST['hours']);
 }
 
 
