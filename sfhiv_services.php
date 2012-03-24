@@ -125,6 +125,16 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 				'to' => $post_ID,
 			));
 		}
+		$tax_terms = array('sfhiv_service_category','sfhiv_population_category');
+		foreach($tax_terms as $tax){
+			$parent_terms = wp_get_object_terms($parent_ID,$tax,array('fields'=>'slugs'));
+			wp_set_object_terms($post_ID,$parent_terms,$tax);
+		}
+		$parent_status = get_post_status($parent_ID);
+		wp_update_post(array(
+			'ID' => $post_ID,
+			'post_status' => $parent_status,
+		));
 	}
 	// check and save post meta
 	if(isset($post_data['day_of_week'])){
