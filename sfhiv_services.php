@@ -81,11 +81,25 @@ function sfhiv_service_time_box($post){
 	));
 	foreach($service_hours->posts as $hour){
 		sfhiv_draw_services_hours_op_meta($hour,'hours['.$hour->ID.']');
+		echo sfhiv_delete_service_hour_link($hour);
 	}
 	?><h4>Add new time and location</h4><?
 	sfhiv_draw_services_hours_op_meta($post,'hours[new]');
 }
 
+function sfhiv_delete_service_hour_link($post,$link = 'Delete This', $before = '', $after = '', $title="Move this item to the Trash") {
+    if ( $post->post_type == 'page' ) {
+        if ( !current_user_can( 'edit_page' ) )
+            return;
+    } else {
+        if ( !current_user_can( 'edit_post' ) )
+            return;
+    }
+	$href = "/wp-admin/post.php?action=trash&post=" . $post->ID;
+    $delLink = wp_nonce_url( site_url() . $href, 'trash-' . $post->post_type . '_' . $post->ID);
+    $link = '<a href="' . $delLink . '" onclick="javascript:if(!confirm(\'Are you sure you want to move this item to trash?\')) return false;" title="'.$title.'" />'.$link."</a>";
+    return $before . $link . $after;
+}
 
 add_action( 'save_post', 'sfhiv_service_hour_time_save' );
 function sfhiv_service_hour_time_save($post_ID,$post){
