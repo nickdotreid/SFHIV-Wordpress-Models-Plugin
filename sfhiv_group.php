@@ -10,10 +10,12 @@ function sfhiv_create_group_type() {
 			),
 		'public' => true,
 		'has_archive' => true,
+		'hierarchical' => true,
 		'rewrite' => array(
 			'slug' => 'groups',
 			'feeds' => false,
 		),
+		'capability_type' => 'page',
 		'supports' => array('title','editor','thumbnail','excerpt','page-attributes'),
 		'can_export' => true,
 		)
