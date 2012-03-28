@@ -28,6 +28,7 @@ function sfhiv_add_events_type(){
 }
 
 function sfhiv_add_events_meta_boxes(){
+	wp_enqueue_script('sfhiv_event_js', get_bloginfo('stylesheet_directory') . '/models/assets/js/admin-event.js',array('jquery'));
 	add_meta_box( 'event_time', 'When', 'sfhiv_event_time_box', 'sfhiv_event' );
 }
 
@@ -35,10 +36,10 @@ function sfhiv_event_time_box($post){
 	$start_time = get_post_meta($post->ID, 'sfhiv_event_start',true);
 	$end_time = get_post_meta($post->ID, 'sfhiv_event_end',true);
 	?>
-	<p><label>Start Day:<input type="text" name="sfhiv_event_start_day" value="<?=date('Y-m-d',$start_time);?>" /></label></p>
-	<p><label>Start Time:<input type="text" name="sfhiv_event_start_time" value="<?=date('g:i a',$start_time);?>" /></label></p>
-	<p><label>End Day:<input type="text" name="sfhiv_event_end_day" value="<?=date('Y-m-d',$end_time);?>" /></label></p>
-	<p><label>End Time:<input type="text" name="sfhiv_event_end_time" value="<?=date('g:i a',$end_time);?>" /></label></p>
+	<p><label>Start Day:<input id="sfhiv_event_start_date" class="sfhiv-date" type="text" name="sfhiv_event_start_day" value="<?=date('Y-m-d',$start_time);?>" /></label></p>
+	<p><label>Start Time:<input id="sfhiv_event_start_time" class="sfhiv-time" type="text" name="sfhiv_event_start_time" value="<?=date('g:i a',$start_time);?>" /></label></p>
+	<p><label>End Day:<input id="sfhiv_event_end_date" class="sfhiv-date" type="text" name="sfhiv_event_end_day" value="<?=date('Y-m-d',$end_time);?>" /></label></p>
+	<p><label>End Time:<input id="sfhiv_event_end_time" class="sfhiv-time" type="text" name="sfhiv_event_end_time" value="<?=date('g:i a',$end_time);?>" /></label></p>
 	<?
 }
 
