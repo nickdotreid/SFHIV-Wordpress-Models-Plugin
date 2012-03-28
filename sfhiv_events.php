@@ -33,18 +33,26 @@ function sfhiv_add_events_meta_boxes(){
 
 function sfhiv_event_time_box($post){
 	$start_time = get_post_meta($post->ID, 'sfhiv_event_start',true);
+	$end_time = get_post_meta($post->ID, 'sfhiv_event_end',true);
 	?>
-	<label>Day <input type="text" name="sfhiv_event_day" value="<?=date('Y-m-d',$start_time);?>" /></label>
-	<label>Time <input type="text" name="sfhiv_event_time" value="<?=date('h:m',$start_time);?>" /></label>
+	<p><label>Start Day:<input type="text" name="sfhiv_event_start_day" value="<?=date('Y-m-d',$start_time);?>" /></label></p>
+	<p><label>Start Time:<input type="text" name="sfhiv_event_start_time" value="<?=date('g:i a',$start_time);?>" /></label></p>
+	<p><label>End Day:<input type="text" name="sfhiv_event_end_day" value="<?=date('Y-m-d',$end_time);?>" /></label></p>
+	<p><label>End Time:<input type="text" name="sfhiv_event_end_time" value="<?=date('g:i a',$end_time);?>" /></label></p>
 	<?
 }
 
 add_action( 'save_post', 'sfhiv_event_time_save' );
 function sfhiv_event_time_save($post_ID,$post){
 	if(get_post_type($post_ID) != 'sfhiv_event') return;
-	if(!isset($_POST['sfhiv_event_day']) || $_POST['sfhiv_event_day']=="" || !isset($_POST['sfhiv_event_time']) || $_POST['sfhiv_event_time']=="") return;
-	$start_time = strtotime($_POST['sfhiv_event_day'].' '.$_POST['sfhiv_event_time']);
-	update_post_meta($post_ID, 'sfhiv_event_start', $start_time);
+	if(isset($_POST['sfhiv_event_start_day']) || $_POST['sfhiv_event_start_day']!="" || isset($_POST['sfhiv_event_start_time']) || $_POST['sfhiv_event_start_time']!=""){
+		$start_time = strtotime($_POST['sfhiv_event_start_day'].' '.$_POST['sfhiv_event_start_time']);
+		update_post_meta($post_ID, 'sfhiv_event_start', $start_time);
+	}
+	if(isset($_POST['sfhiv_event_end_day']) || $_POST['sfhiv_event_end_day']!="" || isset($_POST['sfhiv_event_end_time']) || $_POST['sfhiv_event_end_time']!=""){
+		$end_time = strtotime($_POST['sfhiv_event_end_day'].' '.$_POST['sfhiv_event_end_time']);
+		update_post_meta($post_ID, 'sfhiv_event_end', $end_time);
+	}
 }
 
 add_action('init','sfhiv_add_event_category');
