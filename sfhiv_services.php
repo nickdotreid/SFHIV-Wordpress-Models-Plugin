@@ -158,11 +158,11 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 		}
 	}
 	if(isset($post_data['start'])){
-		$seconds = strtotime($post_data['start']);
+		$seconds = sfhiv_service_hours_string_to_time($post_data['start']);
 		update_post_meta($post_ID, 'sfhiv_service_start', $seconds);
 	}
 	if(isset($post_data['end'])){
-		$seconds = strtotime($post_data['end']);
+		$seconds = sfhiv_service_hours_string_to_time($post_data['end']);
 		update_post_meta($post_ID, 'sfhiv_service_end', $seconds);
 	}
 }
@@ -244,5 +244,8 @@ function sfhiv_service_hours_save($post_ID,$post){
 	sfhiv_create_or_update_service_hours($post_ID,$_POST['hours']);
 }
 
+function sfhiv_service_hours_string_to_time($string){
+	return strtotime($string)-strtotime('12AM');
+}
 
 ?>
