@@ -20,9 +20,6 @@ function sfhiv_add_services_type(){
 		)
 	);
 	add_post_type_support( 'sfhiv_service', 'excerpt' );
-	/*
-
-	*/
 }
 
 add_action('init','sfhiv_add_service_category');
