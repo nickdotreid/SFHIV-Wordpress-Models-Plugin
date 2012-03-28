@@ -36,24 +36,33 @@ function sfhiv_event_time_box($post){
 	$start_time = get_post_meta($post->ID, 'sfhiv_event_start',true);
 	$end_time = get_post_meta($post->ID, 'sfhiv_event_end',true);
 	?>
-	<p><label>Start Day:<input id="sfhiv_event_start_date" class="sfhiv-date" type="text" name="sfhiv_event_start_day" value="<?=date('Y-m-d',$start_time);?>" /></label></p>
-	<p><label>Start Time:<input id="sfhiv_event_start_time" class="sfhiv-time" type="text" name="sfhiv_event_start_time" value="<?=date('g:i a',$start_time);?>" /></label></p>
-	<p><label>End Day:<input id="sfhiv_event_end_date" class="sfhiv-date" type="text" name="sfhiv_event_end_day" value="<?=date('Y-m-d',$end_time);?>" /></label></p>
-	<p><label>End Time:<input id="sfhiv_event_end_time" class="sfhiv-time" type="text" name="sfhiv_event_end_time" value="<?=date('g:i a',$end_time);?>" /></label></p>
+	<p><label>Start Day:<input id="sfhiv_event_start_date" class="sfhiv-date" type="text" name="sfhiv_event[start][date]" value="<?=date('Y-m-d',$start_time);?>" /></label></p>
+	<p><label>Start Time:<input id="sfhiv_event_start_time" class="sfhiv-time" type="text" name="sfhiv_event[start][time]" value="<?=date('g:i a',$start_time);?>" /></label></p>
+	<p><label>End Day:<input id="sfhiv_event_end_date" class="sfhiv-date" type="text" name="sfhiv_event_end_day[end][date]" value="<?=date('Y-m-d',$end_time);?>" /></label></p>
+	<p><label>End Time:<input id="sfhiv_event_end_time" class="sfhiv-time" type="text" name="sfhiv_event_end_time[end][time]" value="<?=date('g:i a',$end_time);?>" /></label></p>
 	<?
 }
 
 add_action( 'save_post', 'sfhiv_event_time_save' );
-function sfhiv_event_time_save($post_ID,$post){
+function sfhiv_event_time_save($post_ID){
 	if(get_post_type($post_ID) != 'sfhiv_event') return;
-	if(isset($_POST['sfhiv_event_start_day']) || $_POST['sfhiv_event_start_day']!="" || isset($_POST['sfhiv_event_start_time']) || $_POST['sfhiv_event_start_time']!=""){
-		$start_time = strtotime($_POST['sfhiv_event_start_day'].' '.$_POST['sfhiv_event_start_time']);
-		update_post_meta($post_ID, 'sfhiv_event_start', $start_time);
+	$start_time = sfhiv_event_save_time($post_ID,'sfhiv_event_start',$_POST['sfhiv_event']['start']);
+	$end_time = sfhiv_event_save_time($post_ID,'sfhiv_event_end',$_POST['sfhiv_event']['end']);
+	
+	if($start_time && $end_time && $end_time<$start_time){
+		update_post_meta($post_ID, 'sfhiv_event_end', $start_time);
 	}
-	if(isset($_POST['sfhiv_event_end_day']) || $_POST['sfhiv_event_end_day']!="" || isset($_POST['sfhiv_event_end_time']) || $_POST['sfhiv_event_end_time']!=""){
-		$end_time = strtotime($_POST['sfhiv_event_end_day'].' '.$_POST['sfhiv_event_end_time']);
-		update_post_meta($post_ID, 'sfhiv_event_end', $end_time);
+	if($start_time && !$end_time){
+		update_post_meta($post_ID, 'sfhiv_event_end', $start_time);
 	}
+}
+
+function sfhiv_event_save_time($post_ID,$key,$postdata){
+	if(!isset($postdata['date']) || $postdata['date']=="" || !isset($postdata['time']) || $postdata['time']=="") return false;
+	$time = strtotime($postdata['date'].' '.$postdata['time']);
+	if(!$time)	return false;
+	update_post_meta($post_ID, $key, $time);
+	return $time;
 }
 
 add_action('init','sfhiv_add_event_category');
