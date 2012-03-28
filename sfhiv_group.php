@@ -56,7 +56,7 @@ function sfhiv_group_connection_types() {
 	p2p_register_connection_type( array(
 		'name' => 'group_events',
 		'from' => 'sfhiv_group',
-		'to' => 'event',
+		'to' => 'sfhiv_event',
 	));
 
 	p2p_register_connection_type( array(
