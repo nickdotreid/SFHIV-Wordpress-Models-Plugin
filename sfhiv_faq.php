@@ -16,7 +16,7 @@ function sfhiv_add_faq_type(){
 			'feeds' => false,
 		),
 		'capability_type' => 'post',
-		'supports' => array('title','editor','excerpt','page-attributes'),
+		'supports' => array('title','editor','page-attributes'),
 		'taxonomies' => array('sfhiv_service_category','sfhiv_population_category'),
 		)
 	);
