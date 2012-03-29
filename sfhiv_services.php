@@ -245,4 +245,12 @@ function sfhiv_service_hours_string_to_time($string){
 	return strtotime($string)-strtotime('12AM');
 }
 
+function sfhiv_service_hour_order_query( $query ) {
+    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return;
+    $query->set( 'orderby', 'meta_value_num' );
+    $query->set( 'meta_key', 'sfhiv_service_start' );
+    $query->set( 'order', 'ASC' );
+}
+add_action( 'pre_get_posts', 'sfhiv_service_hour_order_query' );
+
 ?>
