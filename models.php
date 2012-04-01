@@ -1,4 +1,6 @@
 <?php
+require_once('page.php');
+
 // Register Taxonomies
 require_once('sfhiv_year_tag.php');
 
