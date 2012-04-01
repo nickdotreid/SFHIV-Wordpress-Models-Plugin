@@ -14,5 +14,6 @@ require_once('sfhiv_faq.php');
 require_once('sfhiv_user.php');
 
 require_once('sfhiv_events.php');
+require_once('sfhiv_location.php');
 
 ?>
