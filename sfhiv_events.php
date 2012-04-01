@@ -30,6 +30,7 @@ function sfhiv_add_events_type(){
 function sfhiv_add_events_meta_boxes(){
 	wp_enqueue_script('sfhiv_event_js', get_bloginfo('stylesheet_directory') . '/models/assets/js/admin-event.js',array('jquery'));
 	add_meta_box( 'event_time', 'When', 'sfhiv_event_time_box', 'sfhiv_event', 'side', 'high' );
+	sfhiv_location_add_choose_location_meta_box('sfhiv_event');
 }
 
 function sfhiv_event_time_box($post){

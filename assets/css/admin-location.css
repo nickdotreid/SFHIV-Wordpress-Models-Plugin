@@ -1,0 +1,10 @@
+.sfhiv_location input,.sfhiv_location label{
+	display:block;
+}
+.sfhiv_location label{
+	margin-top:7px;
+}
+.sfhiv_location label.hint{
+	margin-top:0px;
+	font-style:italic;
+}
