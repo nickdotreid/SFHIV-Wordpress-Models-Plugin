@@ -20,7 +20,7 @@ function sfhiv_add_location_type(){
 	
 	p2p_register_connection_type( array(
 		'name' => 'related_location',
-		'from' => array('sfhiv_event','sfhiv_service_hour'),
+		'from' => array('sfhiv_event','sfhiv_service_hour','sfhiv_group'),
 		'to' => 'sfhiv_location',
 		'admin_box' => false,
 	) );

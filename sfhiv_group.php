@@ -18,9 +18,13 @@ function sfhiv_create_group_type() {
 		'capability_type' => 'page',
 		'supports' => array('title','editor','thumbnail','excerpt','page-attributes'),
 		'can_export' => true,
+		'register_meta_box_cb' => 'sfhiv_add_groups_meta_boxes',
 		)
 	);
-	add_post_type_support( 'group', 'excerpt' );
+}
+
+function sfhiv_add_groups_meta_boxes(){
+	sfhiv_location_add_choose_location_meta_box('sfhiv_group');
 }
 
 add_action( 'init', 'sfhiv_create_group_categories' );
@@ -40,7 +44,7 @@ function sfhiv_create_group_categories() {
 
   register_taxonomy('sfhiv_group_category',array(
 	'sfhiv_group',
-	'event'
+	'sfhiv_event'
 	),array(
     'hierarchical' => true,
     'labels' => $labels,
