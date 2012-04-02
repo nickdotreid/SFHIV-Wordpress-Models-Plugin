@@ -115,6 +115,7 @@ function sfhiv_location_location_list($post,$args=array()){
 	),$args);
 	$locations = get_posts(array(
 		'post_type'=>'sfhiv_location',
+		'nopaging' => true,
 	));
 	$connected_location = new WP_Query( array(
 		'connected_type' => 'related_location',
