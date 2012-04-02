@@ -135,13 +135,11 @@ function sfhiv_location_location_list($post,$args=array()){
 	?>
 	</ul>
 	<?
-	/*
 	if(!isset($args['hide_create_button'])):
 	?>
 	<a href="#" class="new sfhiv_location button">New Location</a>
 	<?
 	endif;
-	*/
 }
 
 function sfhiv_location_list_item($location,$args = array()){
@@ -200,6 +198,17 @@ function sfhiv_location_save($post_ID,$postdata = array()){
 		if($value != ""){
 			update_post_meta($post_ID,'sfhiv_'.$key,$value);			
 		}
+	}
+}
+
+function sfhiv_location_get_related_location($post_ID){
+	$connected_location = new WP_Query( array(
+		'connected_type' => 'related_location',
+		'connected_items' => $post_ID,
+	));
+	if($connected_location->post_count<1) return false;
+	foreach($connected_location->posts as $post){
+		return $post;
 	}
 }
 
