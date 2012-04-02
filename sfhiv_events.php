@@ -89,27 +89,30 @@ function sfhiv_add_event_category(){
 
 function sfhiv_event_order_query( $query ) {
     if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
-	if(isset($_GET['sfhiv_event_time'])){
-		$meta_query = array();
-		if($_GET['sfhiv_event_time']=='upcoming'){
-			$meta_query[] = array(
-	            'key' => 'sfhiv_event_start',
-	            'value' => time(),
-	            'compare' => '>'
-	        );
-		}
-		if($_GET['sfhiv_event_time']=='past'){
-			$meta_query[] = array(
-	            'key' => 'sfhiv_event_start',
-	            'value' => time(),
-	            'compare' => '<'
-	        );
-		}
-	    $query->set( 'meta_query', $meta_query );
+	$meta_query = array();
+	if(!isset($_GET['sfhiv_event_time']) || $_GET['sfhiv_event_time']=='upcoming'){
+		$meta_query[] = array(
+            'key' => 'sfhiv_event_start',
+            'value' => time(),
+            'compare' => '>'
+        );
 	}
+	if($_GET['sfhiv_event_time']=='past'){
+		$meta_query[] = array(
+            'key' => 'sfhiv_event_start',
+            'value' => time(),
+            'compare' => '<'
+        );
+	}
+    $query->set( 'meta_query', $meta_query );
+	
     $query->set( 'orderby', 'meta_value_num' );
     $query->set( 'meta_key', 'sfhiv_event_start' );
-    $query->set( 'order', 'ASC' );
+	if(!isset($_GET['sfhiv_event_time']) || $_GET['sfhiv_event_time']=='upcoming'){
+    	$query->set( 'order', 'ASC' );
+	}else{
+		$query->set( 'order', 'DESC' );
+	}
 }
 add_action( 'pre_get_posts', 'sfhiv_event_order_query' );
 
