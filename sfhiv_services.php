@@ -86,8 +86,8 @@ function sfhiv_service_time_box($post){
 	}
 	?><h4>Add new time and location</h4><?
 	sfhiv_draw_services_hours_op_meta($post,'hours[new]');
-	sfhiv_location_location_list($hour,array(
-		'field_name' => 'hours['.$hour->ID.'][sfhiv_location]',
+	sfhiv_location_location_list($post,array(
+		'field_name' => 'hours[new][sfhiv_location]',
 		'hide_create_button'=>true,
 		));
 }
