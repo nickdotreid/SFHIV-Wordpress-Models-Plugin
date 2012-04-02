@@ -78,10 +78,18 @@ function sfhiv_service_time_box($post){
 	));
 	foreach($service_hours->posts as $hour){
 		sfhiv_draw_services_hours_op_meta($hour,'hours['.$hour->ID.']');
+		sfhiv_location_location_list($hour,array(
+			'field_name' => 'hours['.$hour->ID.'][sfhiv_location]',
+			'hide_create_button'=>true,
+			));
 		echo sfhiv_delete_service_hour_link($hour);
 	}
 	?><h4>Add new time and location</h4><?
 	sfhiv_draw_services_hours_op_meta($post,'hours[new]');
+	sfhiv_location_location_list($hour,array(
+		'field_name' => 'hours['.$hour->ID.'][sfhiv_location]',
+		'hide_create_button'=>true,
+		));
 }
 
 function sfhiv_delete_service_hour_link($post,$link = 'Delete This', $before = '', $after = '', $title="Move this item to the Trash") {
@@ -194,6 +202,7 @@ function sfhiv_add_service_hours_type(){
 		'name' => 'service_time',
 		'from' => 'sfhiv_service',
 		'to' => 'sfhiv_service_hour',
+		'admin_box' => false,
 	) );
 }
 

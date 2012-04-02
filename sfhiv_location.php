@@ -22,6 +22,7 @@ function sfhiv_add_location_type(){
 		'name' => 'related_location',
 		'from' => array('sfhiv_event','sfhiv_service_hour'),
 		'to' => 'sfhiv_location',
+		'admin_box' => false,
 	) );
 }
 
@@ -108,7 +109,10 @@ function sfhiv_location_choose_location_meta_box($post){
 	sfhiv_location_location_list($post);
 }
 
-function sfhiv_location_location_list($post){
+function sfhiv_location_location_list($post,$args=array()){
+	$args = array_merge(array(
+		'field_name' => 'sfhiv_location',
+	),$args);
 	$locations = get_posts(array(
 		'post_type'=>'sfhiv_location',
 	));
@@ -124,21 +128,27 @@ function sfhiv_location_location_list($post){
 	<ul class="sfhiv_location list">
 	<?
 	foreach($locations as $location){
-		$args = array();
-		if(in_array($location->ID,$connected_ids)) $args['selected']=true;
-		sfhiv_location_list_item($location,$args);
+		$location_args = array_merge(array(),$args);
+		if(in_array($location->ID,$connected_ids)) $location_args['selected']=true;
+		sfhiv_location_list_item($location,$location_args);
 	}
 	?>
 	</ul>
+	<?
+	/*
+	if(!isset($args['hide_create_button'])):
+	?>
 	<a href="#" class="new sfhiv_location button">New Location</a>
 	<?
+	endif;
+	*/
 }
 
 function sfhiv_location_list_item($location,$args = array()){
 	?>
 	<li class="sfhiv_location">
 		<label class="radio">
-			<input type="radio" <?	if($args['selected']) echo 'checked="checked"';	?> name="sfhiv_location" value="<?=$location->ID;?>"><?=apply_filters('the_title',$location->post_title);?></label>
+			<input type="radio" <?	if($args['selected']) echo 'checked="checked"';	?> name="<?=$args['field_name'];?>" value="<?=$location->ID;?>"><?=apply_filters('the_title',$location->post_title);?></label>
 		</label>
 	</li>
 	<?
