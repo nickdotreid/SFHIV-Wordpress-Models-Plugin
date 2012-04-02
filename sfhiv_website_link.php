@@ -36,4 +36,20 @@ function sfhiv_website_link_save($post_ID){
 	}
 }
 
+add_filter('post_type_link','sfhiv_website_link_filter',2,2);
+add_filter('page_link','sfhiv_website_link_filter',2,2);
+function sfhiv_website_link_filter($link,$post_id){
+	if(is_admin()){
+		return $link;
+	}
+	if(is_object($post_id)){
+		$post_id = $post_id->ID;
+	}
+	$forward = get_post_meta($post_id,'sfhiv_website_link_forward',true);
+	if($forward){
+		return get_post_meta($post_id,'sfhiv_website_link',true);
+	}
+	return $link;
+}
+
 ?>
