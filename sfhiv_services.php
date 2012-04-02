@@ -147,6 +147,10 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 			'post_status' => $parent_status,
 		));
 	}
+	// update location reference
+	if(isset($post_data['sfhiv_location'])){
+		sfhiv_location_relation_save($post_ID,$post_data['sfhiv_location']);
+	}
 	// check and save post meta
 	if(isset($post_data['day_of_week'])){
 		delete_post_meta($post_ID,'sfhiv_service_days');

@@ -164,13 +164,17 @@ function sfhiv_location_ajax_location_create() {
 	die(); // this is required to return a proper result
 }
 
-add_action( 'save_post', 'sfhiv_location_relation_save' );
-function sfhiv_location_relation_save($post_ID){
+add_action( 'save_post', 'sfhiv_location_post_relation_save' );
+function sfhiv_location_post_relation_save($post_ID){
 	if(get_post_type($post_ID) == 'sfhiv_location') return;
 	if(!isset($_POST['sfhiv_location'])) return;
+	sfhiv_location_relation_save($post_ID,$_POST['sfhiv_location']);
+}
+function sfhiv_location_relation_save($post_ID,$location_ID){
+	p2p_type( 'related_location' )->disconnect_all($post_ID);
 	p2p_create_connection( 'related_location', array(
 		'from' => $post_ID,
-		'to' => $_POST['sfhiv_location'],
+		'to' => $location_ID,
 	));
 }
 
