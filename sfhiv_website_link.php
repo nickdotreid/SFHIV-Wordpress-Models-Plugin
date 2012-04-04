@@ -2,8 +2,12 @@
 
 add_action('add_meta_boxes','sfhiv_website_link_add_all_boxes');
 function sfhiv_website_link_add_all_boxes(){
+	sfhiv_website_link_add_meta_box('sfhiv_report');
+	sfhiv_website_link_add_meta_box('sfhiv_study');
 	sfhiv_website_link_add_meta_box('sfhiv_group');
+	sfhiv_website_link_add_meta_box('sfhiv_service');
 	sfhiv_website_link_add_meta_box('sfhiv_event');
+	sfhiv_website_link_add_meta_box('post');
 	sfhiv_website_link_add_meta_box('page');
 }
 
