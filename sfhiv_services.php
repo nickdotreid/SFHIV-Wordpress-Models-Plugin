@@ -78,6 +78,7 @@ function sfhiv_service_time_box($post){
 	));
 	foreach($service_hours->posts as $hour){
 		sfhiv_draw_services_hours_op_meta($hour,'hours['.$hour->ID.']');
+		sfhiv_draw_service_hours_order($hour,'hours['.$hour->ID.']');
 		sfhiv_location_location_list($hour,array(
 			'field_name' => 'hours['.$hour->ID.'][sfhiv_location]',
 			'hide_create_button'=>true,
@@ -90,6 +91,11 @@ function sfhiv_service_time_box($post){
 		'field_name' => 'hours[new][sfhiv_location]',
 		'hide_create_button'=>true,
 		));
+}
+
+function sfhiv_draw_service_hours_order($post,$field_name){
+	echo '<label for="'.$field_name.'-menu_order">Order</label>';
+	echo '<input id="'.$field_name.'-menu_order" type="text" name="'.$field_name.'[menu_order]" value="'.$post->menu_order.'" />';
 }
 
 function sfhiv_delete_service_hour_link($post,$link = 'Delete This', $before = '', $after = '', $title="Move this item to the Trash") {
@@ -153,6 +159,12 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 		wp_update_post(array(
 			'ID' => $post_ID,
 			'post_status' => $parent_status,
+		));
+	}
+	if(isset($post_data['menu_order'])){
+		wp_update_post(array(
+			'ID' => $post_ID,
+			'menu_order' => $post_data['menu_order'],
 		));
 	}
 	// update location reference
@@ -261,7 +273,8 @@ function sfhiv_service_hours_string_to_time($string){
 
 function sfhiv_service_hour_order_query( $query ) {
     if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return;
-    $query->set( 'orderby', 'meta_value_num' );
+	//$query->set( 'orderby', 'meta_value_num' );
+	$query->set( 'orderby', 'menu_order meta_value_num' );
     $query->set( 'meta_key', 'sfhiv_service_start' );
     $query->set( 'order', 'ASC' );
 }
