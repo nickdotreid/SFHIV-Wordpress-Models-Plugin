@@ -4,6 +4,8 @@ add_action('add_meta_boxes','sfhiv_link_to_page_add_all_boxes');
 function sfhiv_link_to_page_add_all_boxes(){
 	sfhiv_link_to_page_add_meta_box('sfhiv_group');
 	sfhiv_link_to_page_add_meta_box('sfhiv_event');
+	sfhiv_link_to_page_add_meta_box('sfhiv_document');
+	sfhiv_link_to_page_add_meta_box('sfhiv_report');
 	sfhiv_link_to_page_add_meta_box('sfhiv_service');
 }
 
