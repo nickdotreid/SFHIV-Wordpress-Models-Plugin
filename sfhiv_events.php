@@ -87,33 +87,91 @@ function sfhiv_add_event_category(){
   ));
 }
 
-function sfhiv_event_order_query( $query ) {
-    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
-	$meta_query = array();
-	if(!isset($_GET['sfhiv_event_time']) || $_GET['sfhiv_event_time']=='upcoming'){
-		$meta_query[] = array(
-            'key' => 'sfhiv_event_start',
-            'value' => time(),
-            'compare' => '>'
-        );
-	}
-	if($_GET['sfhiv_event_time']=='past'){
-		$meta_query[] = array(
-            'key' => 'sfhiv_event_start',
-            'value' => time(),
-            'compare' => '<'
-        );
-	}
-    $query->set( 'meta_query', $meta_query );
-	
-    $query->set( 'orderby', 'meta_value_num' );
-    $query->set( 'meta_key', 'sfhiv_event_start' );
-	if(!isset($_GET['sfhiv_event_time']) || $_GET['sfhiv_event_time']=='upcoming'){
-    	$query->set( 'order', 'ASC' );
-	}else{
-		$query->set( 'order', 'DESC' );
+add_action('parse_query','sfhiv_event_query_set_vars');
+function sfhiv_event_query_set_vars($query){
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
+	$query->set("sfhiv_event_selection","future");
+	if(isset($_GET['sfhiv_event_time'])){
+		switch($_GET['sfhiv_event_time']){
+			case "upcoming":
+				$query->set("sfhiv_event_selection","future");
+				break;
+			case "past":
+				$query->set("sfhiv_event_selection","past");
+			break;
+			default:
+				$query->set("sfhiv_event_selection","all");
+		}
 	}
 }
-add_action( 'pre_get_posts', 'sfhiv_event_order_query' );
+
+add_action( 'pre_get_posts', 'sfhiv_event_order_query', 5 );
+function sfhiv_event_order_query( $query ) {
+	console("HELLO ".$query->query_vars['post_type']);
+    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
+
+    $query->set( 'meta_key', 'sfhiv_event_start' );
+	$query->set( 'orderby', 'meta_value_num' );
+	switch($query->query_vars['sfhiv_event_selection']){
+		case "future":
+			$query->set( 'order', 'ASC' );
+			break;
+		default:
+			console("sort down");
+			$query->set( 'order', 'DESC' );
+			break;
+	}
+}
+
+add_action( 'pre_get_posts', 'sfhiv_event_query_update', 4 );
+function sfhiv_event_query_update($query){
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
+	console("HELLO ".$query->query_vars['post_type']);
+	
+	remove_action( 'pre_get_posts', 'sfhiv_event_query_update', 4 );
+	remove_action( 'pre_get_posts', 'sfhiv_event_order_query', 5 );
+	remove_action('parse_query','sfhiv_event_query_set_vars');
+	
+	switch($query->query_vars['sfhiv_event_selection']){
+		case "future":
+			$query->set( 'meta_query', array(
+				"relation" => "AND",
+				array(
+		        'key' => 'sfhiv_event_start',
+		        'value' => time(),
+		        'compare' => '>'
+		    ) ));
+			if(sfhiv_event_test_query($query)){
+				break;
+			}
+			console("future fail");
+		case "past":
+			$query->set( 'meta_query', array(
+				"relation" => "AND",
+				array(
+		        'key' => 'sfhiv_event_start',
+		        'value' => time(),
+		        'compare' => '<'
+		    ) ));
+			if(sfhiv_event_test_query($query)){
+				break;
+			}
+			console("past fail");
+		default:
+			$query->set( 'meta_query', array() );
+	}
+	
+	add_action( 'pre_get_posts', 'sfhiv_event_query_update', 4 );
+	add_action( 'pre_get_posts', 'sfhiv_event_order_query', 5 );
+	add_action('parse_query','sfhiv_event_query_set_vars');
+}
+
+function sfhiv_event_test_query($query){
+	$test_query = new WP_Query($query->query_vars);
+	if($test_query->post_count>0){
+		return true;
+	}
+	return false;
+}
 
 ?>
