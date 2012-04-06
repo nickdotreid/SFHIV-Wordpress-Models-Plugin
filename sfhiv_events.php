@@ -10,7 +10,7 @@ function sfhiv_add_events_type(){
 			),
 		'public' => true,
 		'has_archive' => true,
-		'hierarchical' => false,
+		'hierarchical' => true,
 		'rewrite' => array(
 			'slug' => 'events',
 			'feeds' => false,
