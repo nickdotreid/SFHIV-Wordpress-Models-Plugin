@@ -142,9 +142,9 @@ function sfhiv_event_query_update($query){
 		        'compare' => '>'
 		    ) ));
 			if(sfhiv_event_test_query($query)){
+				$query->set("sfhiv_event_selection","future");
 				break;
 			}
-			console("future fail");
 		case "past":
 			$query->set( 'meta_query', array(
 				"relation" => "AND",
@@ -154,9 +154,9 @@ function sfhiv_event_query_update($query){
 		        'compare' => '<'
 		    ) ));
 			if(sfhiv_event_test_query($query)){
+				$query->set("sfhiv_event_selection","past");
 				break;
 			}
-			console("past fail");
 		default:
 			$query->set( 'meta_query', array() );
 	}
