@@ -169,6 +169,8 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 			'menu_order' => $post_data['menu_order'],
 		));
 	}
+	// update time
+	sfhiv_service_time_of_day_save_post_update($post_ID);
 	// update location reference
 	if(isset($post_data['sfhiv_location'])){
 		sfhiv_location_relation_save($post_ID,$post_data['sfhiv_location']);
