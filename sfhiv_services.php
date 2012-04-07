@@ -1,5 +1,7 @@
 <?php
 
+include_once("sfhiv_services_time_taxonomy.php");
+
 add_action('init','sfhiv_add_services_type');
 function sfhiv_add_services_type(){
 	register_post_type( 'sfhiv_service',
