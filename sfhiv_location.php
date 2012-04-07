@@ -26,6 +26,30 @@ function sfhiv_add_location_type(){
 	) );
 }
 
+add_action('init','sfhiv_add_neighborhood_tag');
+function sfhiv_add_neighborhood_tag(){
+	$labels = array(
+    'name' => _x( 'Neighborhood Categories', 'taxonomy general name' ),
+    'singular_name' => _x( 'Neighborhood Category', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Search Neighborhood Categories' ),
+    'all_items' => __( 'All Neighborhood Categories' ),
+    'parent_item' => __( 'Parent Neighborhood Category' ),
+    'parent_item_colon' => __( 'Parent Neighborhood Category:' ),
+    'edit_item' => __( 'Edit Neighborhood Category' ),
+    'update_item' => __( 'Update Neighborhood Category' ),
+    'add_new_item' => __( 'Add New Neighborhood Category' ),
+    'new_item_name' => __( 'New Group Neighborhood Name' ),
+  ); 	
+
+  register_taxonomy('sfhiv_neighborhood_category',array(
+	'sfhiv_location','sfhiv_service_hour','sfhiv_event'
+	),
+	array(
+    'hierarchical' => true,
+    'labels' => $labels,
+  ));
+}
+
 function sfhiv_add_locations_meta_boxes(){
 	wp_enqueue_style('sfhiv_location_css', get_bloginfo('stylesheet_directory') . '/models/assets/css/admin-location.css');
 	//	load google maps
@@ -185,6 +209,11 @@ function sfhiv_location_relation_save($post_ID,$location_ID){
 		'from' => $post_ID,
 		'to' => $location_ID,
 	));
+	$taxonomies = get_object_taxonomies( get_post_type($post_ID) );
+	if(in_array('sfhiv_neighborhood_category',$taxonomies)){
+		$neighborhood_terms = wp_get_object_terms($location_ID,'sfhiv_neighborhood_category',array('fields'=>'slugs'));
+		wp_set_object_terms($post_ID,$neighborhood_terms,'sfhiv_neighborhood_category');
+	}
 }
 
 add_action( 'save_post', 'sfhiv_location_location_save' );
@@ -192,6 +221,15 @@ function sfhiv_location_location_save($post_ID){
 	if(get_post_type($post_ID) != 'sfhiv_location') return;
 	if(isset($_POST['sfhiv_location']) && is_array($_POST['sfhiv_location'])){
 		sfhiv_location_save($post_ID,$_POST['sfhiv_location']);
+	}
+	$connected_to_location = new WP_Query( array(
+		'connected_type' => 'related_location',
+		'connected_items' => $post_ID,
+	));
+	if($connected_to_location->post_count>0){
+		foreach($connected_to_location->posts as $post){
+			sfhiv_location_relation_save($post->ID,$post_ID);
+		}
 	}
 }
 function sfhiv_location_save($post_ID,$postdata = array()){
