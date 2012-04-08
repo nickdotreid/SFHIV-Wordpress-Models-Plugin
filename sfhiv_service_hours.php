@@ -102,7 +102,6 @@ function sfhiv_service_time_box($post){
 	));
 	foreach($service_hours->posts as $hour){
 		sfhiv_draw_services_hours_op_meta($hour,'hours['.$hour->ID.']');
-		sfhiv_draw_service_hours_order($hour,'hours['.$hour->ID.']');
 		sfhiv_location_location_list($hour,array(
 			'field_name' => 'hours['.$hour->ID.'][sfhiv_location]',
 			'hide_create_button'=>true,
@@ -117,10 +116,6 @@ function sfhiv_service_time_box($post){
 		));
 }
 
-function sfhiv_draw_service_hours_order($post,$field_name){
-	echo '<label for="'.$field_name.'-menu_order">Order</label>';
-	echo '<input id="'.$field_name.'-menu_order" type="text" name="'.$field_name.'[menu_order]" value="'.$post->menu_order.'" />';
-}
 
 function sfhiv_delete_service_hour_link($post,$link = 'Delete This', $before = '', $after = '', $title="Move this item to the Trash") {
     if ( $post->post_type == 'page' ) {
