@@ -29,6 +29,8 @@ function sfhiv_add_service_hours_type(){
 	) );
 }
 
+include_once('sfhiv_service_hours_query.php');
+
 function sfhiv_add_service_hours_meta_boxes(){
 	add_meta_box( 'service_hours_time', 'Service Time', 'sfhiv_services_hours_op_meta', 'sfhiv_service_hour' );
 	sfhiv_location_add_choose_location_meta_box('sfhiv_service_hour');
