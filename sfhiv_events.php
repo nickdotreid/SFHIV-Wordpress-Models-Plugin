@@ -107,7 +107,6 @@ function sfhiv_event_query_set_vars($query){
 
 add_action( 'pre_get_posts', 'sfhiv_event_order_query', 5 );
 function sfhiv_event_order_query( $query ) {
-	console("HELLO ".$query->query_vars['post_type']);
     if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
 
     $query->set( 'meta_key', 'sfhiv_event_start' );
