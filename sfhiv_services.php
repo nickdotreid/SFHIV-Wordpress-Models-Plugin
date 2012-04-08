@@ -1,9 +1,5 @@
 <?php
 
-include_once("sfhiv_service_hours.php");
-include_once("sfhiv_services_time_taxonomy.php");
-include_once("sfhiv_services_day_taxonomy.php");
-
 add_action('init','sfhiv_add_services_type');
 function sfhiv_add_services_type(){
 	register_post_type( 'sfhiv_service',
@@ -25,6 +21,10 @@ function sfhiv_add_services_type(){
 	);
 	add_post_type_support( 'sfhiv_service', 'excerpt' );
 }
+
+include_once("sfhiv_service_hours.php");
+include_once("sfhiv_services_time_taxonomy.php");
+include_once("sfhiv_services_day_taxonomy.php");
 
 add_action('init','sfhiv_add_service_category');
 function sfhiv_add_service_category(){
