@@ -10,7 +10,7 @@ function sfhiv_add_service_hours_type(){
 			),
 		'public' => true,
 		'has_archive' => false,
-		'show_in_menu' => 'edit.php?post_type=sfhiv_service',
+//		'show_in_menu' => 'edit.php?post_type=sfhiv_service',
 		'rewrite' => array(
 			'slug' => 'services',
 			'feeds' => false,
