@@ -3,7 +3,7 @@
 add_action( 'init', 'sfhiv_time_of_day_taxonomy_init' );
 function sfhiv_time_of_day_taxonomy_init()
 {
-    register_taxonomy( 'sfhiv_time_of_day_taxonomy', array('sfhiv_event','sfhiv_service_hour'),
+    register_taxonomy( 'sfhiv_time_of_day_taxonomy', array('sfhiv_service_hour'),
         array(  'hierarchical' => false,
                 'label' => __('Time of Day'),
                 'query_var' => false
