@@ -36,6 +36,7 @@ function sfhiv_add_service_hours_meta_boxes(){
 
 function sfhiv_services_hours_op_meta($post){
 	sfhiv_draw_services_hours_op_meta($post,'hours');
+	sfhiv_draw_service_hours_time_meta($post,'hours');
 }
 
 function sfhiv_draw_services_hours_op_meta($post,$form_name){
@@ -48,29 +49,21 @@ function sfhiv_draw_services_hours_op_meta($post,$form_name){
 		'Saturday',
 		'Sunday',
 	);
-	$hours = array();
-	$num = 0;
-	while($num < 12){
-		$num ++;
-		array_push($hours,$num);
-	}
-	$minutes = array();
-	$num = 0;
-	while($num < 60){
-		array_push($minutes,$num);
-		$num += 15;
-	}
 	$ampm = array('AM','PM');
 	
 	$days = get_post_meta($post->ID, 'sfhiv_service_days');
 	
+	include 'templates/service_hours.php';
+}
+
+function sfhiv_draw_service_hours_time_meta($post,$form_name){
 	$start = get_post_meta($post->ID, 'sfhiv_service_start',true);
 	$start = date('g:i a',$start);
 	
 	$end = get_post_meta($post->ID, 'sfhiv_service_end',true);
 	$end = date('g:i a',$end);
 	
-	include 'templates/service_hours.php';
+	include 'templates/service_hours_time.php';
 }
 
 add_action( 'save_post', 'sfhiv_service_hours_save' );
@@ -102,14 +95,16 @@ function sfhiv_service_time_box($post){
 	));
 	foreach($service_hours->posts as $hour){
 		sfhiv_draw_services_hours_op_meta($hour,'hours['.$hour->ID.']');
+		sfhiv_draw_service_hours_time_meta($hour,'hours['.$hour->ID.']');
 		sfhiv_location_location_list($hour,array(
 			'field_name' => 'hours['.$hour->ID.'][sfhiv_location]',
 			'hide_create_button'=>true,
 			));
 		echo sfhiv_delete_service_hour_link($hour);
 	}
-	?><h4>Add new time and location</h4><?
+	?><h4><?_e("Add new time and location");?></h4><?
 	sfhiv_draw_services_hours_op_meta($post,'hours[new]');
+	sfhiv_draw_service_hours_time_meta($post,'hours[new]');
 	sfhiv_location_location_list($post,array(
 		'field_name' => 'hours[new][sfhiv_location]',
 		'hide_create_button'=>true,
