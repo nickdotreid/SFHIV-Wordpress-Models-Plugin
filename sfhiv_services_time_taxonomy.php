@@ -4,7 +4,7 @@ add_action( 'init', 'sfhiv_time_of_day_taxonomy_init' );
 function sfhiv_time_of_day_taxonomy_init()
 {
     register_taxonomy( 'sfhiv_time_of_day_taxonomy', array('sfhiv_service_hour'),
-        array(  'hierarchical' => false,
+        array(  'hierarchical' => true,
                 'label' => __('Time of Day'),
                 'query_var' => false
         )
