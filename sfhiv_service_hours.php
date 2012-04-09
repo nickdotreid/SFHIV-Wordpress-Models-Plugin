@@ -26,6 +26,7 @@ function sfhiv_add_service_hours_type(){
 		'from' => 'sfhiv_service',
 		'to' => 'sfhiv_service_hour',
 		'admin_box' => false,
+		'admin_column' => 'to',
 	) );
 }
 
