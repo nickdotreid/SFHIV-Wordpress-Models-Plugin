@@ -47,4 +47,25 @@ function sfhiv_add_document_category(){
   ));
 }
 
+add_action('init','sfhiv_add_role_category');
+function sfhiv_add_role_category(){
+	$labels = array(
+    'name' => _x( 'Role Categories', 'taxonomy general name' ),
+    'singular_name' => _x( 'Role Category', 'taxonomy singular name' ),
+    'search_items' =>  __( 'Search Role Categories' ),
+    'all_items' => __( 'All Role Categories' ),
+    'parent_item' => __( 'Parent Role Category' ),
+    'parent_item_colon' => __( 'Parent Role Category:' ),
+    'edit_item' => __( 'Edit Role Category' ),
+    'update_item' => __( 'Update Role Category' ),
+    'add_new_item' => __( 'Add New Role Category' ),
+    'new_item_name' => __( 'New Group Role Name' ),
+  ); 	
+
+  register_taxonomy('sfhiv_role_category',array('sfhiv_document','sfhiv_role'),array(
+    'hierarchical' => true,
+    'labels' => $labels,
+  ));
+}
+
 ?>
