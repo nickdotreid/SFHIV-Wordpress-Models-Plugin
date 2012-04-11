@@ -42,5 +42,11 @@ function sfhiv_create_report_categories() {
   ));
 }
 
+add_action( 'pre_get_posts', 'sfhiv_report_query_top_level_only', 5 );
+function sfhiv_report_query_top_level_only( $query ) {
+    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_report' ) return;
+	if(!isset($query->query_vars['child_of']))	$query->query_vars['post_parent'] = 0;
+}
+
 
 ?>
