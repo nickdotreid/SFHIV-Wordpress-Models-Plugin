@@ -19,6 +19,13 @@ function sfhiv_add_studies_type(){
 		'supports' => array('title','editor','excerpt','thumbnail','page-attributes'),
 		)
 	);
+	
+	p2p_register_connection_type( array(
+		'name' => 'sfhiv_study_report',
+		'from' => 'sfhiv_study',
+		'to' => 'sfhiv_report',
+		'admin_column' => 'to',
+	) );
 }
 
 add_action( 'init', 'sfhiv_create_study_categories' );
