@@ -26,6 +26,13 @@ function sfhiv_add_studies_type(){
 		'to' => 'sfhiv_report',
 		'admin_column' => 'to',
 	) );
+	
+	p2p_register_connection_type( array(
+		'name' => 'sfhiv_group_study',
+		'from' => 'sfhiv_group',
+		'to' => 'sfhiv_study',
+		'admin_column' => 'to',
+	) );
 }
 
 add_action( 'init', 'sfhiv_create_study_categories' );
