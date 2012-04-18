@@ -4,8 +4,8 @@ add_action('init','sfhiv_related_pages');
 function sfhiv_related_pages(){
 	p2p_register_connection_type( array(
 		'name' => 'related_pages',
-		'from' => array('page','post','sfhiv_event','sfhiv_group','sfhiv_service','sfhiv_faq'),
-		'to' => array('page','post','sfhiv_event','sfhiv_group','sfhiv_service','sfhiv_faq'),
+		'from' => array('page','post','sfhiv_event','sfhiv_group','sfhiv_service','sfhiv_faq','sfhiv_document'),
+		'to' => array('page','post','sfhiv_event','sfhiv_group','sfhiv_service','sfhiv_faq','sfhiv_document'),
 		'cardinality' => 'one-to-many',
 		'title' => array( 'from' => 'From Page', 'to' => 'To Page' ),
 	));
