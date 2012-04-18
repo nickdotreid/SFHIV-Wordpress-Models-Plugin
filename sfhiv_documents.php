@@ -10,13 +10,13 @@ function sfhiv_add_documents_type(){
 			),
 		'public' => true,
 		'has_archive' => true,
-		'hierarchical' => false,
+		'hierarchical' => true,
 		'rewrite' => array(
 			'slug' => 'documents',
 			'feeds' => false,
 		),
-		'capability_type' => 'post',
-		'supports' => array('title','editor','excerpt'),
+		'capability_type' => 'page',
+		'supports' => array('title','author','editor','excerpt','thumbnail','page-attributes'),
 		'taxonomies' => array(
 			'sfhiv_service_category',
 			'sfhiv_population_category',
@@ -66,6 +66,12 @@ function sfhiv_add_role_category(){
     'hierarchical' => true,
     'labels' => $labels,
   ));
+}
+
+add_action( 'pre_get_posts', 'sfhiv_document_query_top_level_only', 5 );
+function sfhiv_document_query_top_level_only( $query ) {
+    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_document' ) return;
+	if(!isset($query->query_vars['child_of']))	$query->query_vars['post_parent'] = 0;
 }
 
 ?>
