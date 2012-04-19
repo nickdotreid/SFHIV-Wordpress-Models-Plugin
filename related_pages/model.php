@@ -10,6 +10,8 @@ function sfhiv_related_pages(){
 		'from' => $sfhiv_related_pages_types,
 		'to' => $sfhiv_related_pages_types,
 		'admin_box' => false,
+		'reciprocal' => false,
+		'sortable' => 'any',
 	));
 }
 

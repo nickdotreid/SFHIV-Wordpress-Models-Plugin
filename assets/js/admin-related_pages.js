@@ -15,5 +15,19 @@ jQuery(document).ready(function($){
 		},'500'));
 	});
 	
+	jQuery("#related_pages").delegate('.sfhiv_related_page .add','click',function(event){
+		event.preventDefault();
+		jQuery(this).parents('.sfhiv_related_page:first').appendTo('#sfhiv_related_pages_current');
+	}).delegate('.sfhiv_related_page .remove','click',function(event){
+		event.preventDefault();
+		jQuery(this).parents('.sfhiv_related_page:first').remove();
+	});
+	
+	jQuery("form#post").submit(function(){
+		jQuery("#sfhiv_related_pages_search").remove();
+	});
+	
+	$( "#sfhiv_related_pages_current" ).sortable();
+	$( "#sfhiv_related_pages_current li" ).disableSelection();
 	
 });

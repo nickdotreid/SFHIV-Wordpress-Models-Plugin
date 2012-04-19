@@ -17,6 +17,27 @@ function sfhiv_related_pages_metabox($post){
 	include_once('templates/related_pages_form.php');
 }
 
+add_action( 'save_post', 'sfhiv_related_pages_post_save' );
+function sfhiv_related_pages_post_save($post_ID){
+	global $sfhiv_related_pages_types;
+	if(!in_array(get_post_type($post_ID),$sfhiv_related_pages_types)) return;
+	if(!isset($_POST['sfhiv_related'])) return;	// maybe should remove all if empty?
+	$existing_connections = sfhiv_get_related_pages($post_ID);
+	// remove all unconnected post types
+	
+	foreach($existing_connections->posts as $page){
+		if(!in_array($page->ID,$_POST['sfhiv_related'])){
+			p2p_delete_connection($page->p2p_id);
+		}
+	}
+	
+	foreach($_POST['sfhiv_related'] as $index => $related_ID){
+		p2p_type( 'related_pages' )->connect( $post_ID, $related_ID, array(
+			'order' => $index,
+		));
+	}
+}
+
 add_action('wp_ajax_sfhiv_related_pages_search', 'sfhiv_related_pages_search_ajax');
 function sfhiv_related_pages_search_ajax() {
 	global $sfhiv_related_pages_types;
