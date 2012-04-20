@@ -24,6 +24,9 @@ function sfhiv_get_related_pages($id=false){
 	$services = p2p_type( 'related_pages' )->get_connected( $ID, array(
 		'post_type' => $sfhiv_related_pages_types,
 		'nopaging' => true,
+		'connected_orderby' => 'order',
+		'connected_order' => 'asc',
+		'connected_order_num' => true,
 	) );
 	return $services;
 }

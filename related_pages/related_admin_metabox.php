@@ -32,9 +32,19 @@ function sfhiv_related_pages_post_save($post_ID){
 	}
 	
 	foreach($_POST['sfhiv_related'] as $index => $related_ID){
-		p2p_type( 'related_pages' )->connect( $post_ID, $related_ID, array(
-			'order' => $index,
+		$connection_id = false;
+		$connections = p2p_get_connections('related_pages',array(
+			"from" => $post_ID,
+			"to" => $related_ID,
 		));
+		if(count($connections)>0){
+			foreach($connections as $connection){
+				p2p_update_meta($connection->p2p_id,'order',$index);
+			}
+		}else{
+			$connection_id = p2p_type( 'related_pages' )->connect( $post_ID, $related_ID);
+			if($connection_id) p2p_update_meta($connection_id,'order',$index);
+		}
 	}
 }
 
