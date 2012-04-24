@@ -59,6 +59,7 @@ function sfhiv_create_study_categories() {
 add_action( 'pre_get_posts', 'sfhiv_study_query_top_level_only', 5 );
 function sfhiv_study_query_top_level_only( $query ) {
     if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_study' ) return;
+	if($query->query_vars['post_parent']) return;
 	if(!isset($query->query_vars['child_of']))	$query->query_vars['post_parent'] = 0;
 }
 
