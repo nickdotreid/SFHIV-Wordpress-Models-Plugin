@@ -21,9 +21,9 @@ function sfhiv_add_studies_type(){
 	);
 	
 	p2p_register_connection_type( array(
-		'name' => 'sfhiv_study_report',
+		'name' => 'sfhiv_study_document',
 		'from' => 'sfhiv_study',
-		'to' => 'sfhiv_report',
+		'to' => 'sfhiv_document',
 		'admin_column' => 'to',
 	) );
 	
