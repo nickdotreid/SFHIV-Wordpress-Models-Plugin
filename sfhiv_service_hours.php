@@ -17,7 +17,7 @@ function sfhiv_add_service_hours_type(){
 		),
 		'hierarchical' => false,
 		'taxonomies' => array('sfhiv_service_category','sfhiv_population_category'),
-		'supports' => array('title'),
+		'supports' => array('title','editor','excerpt'),
 		'register_meta_box_cb' => 'sfhiv_add_service_hours_meta_boxes',
 		)
 	);
@@ -169,10 +169,14 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 			$parent_terms = wp_get_object_terms($parent_ID,$tax,array('fields'=>'slugs'));
 			wp_set_object_terms($post_ID,$parent_terms,$tax);
 		}
+		$parent = get_post($parent_ID);
 		$parent_status = get_post_status($parent_ID);
 		wp_update_post(array(
 			'ID' => $post_ID,
 			'post_status' => $parent_status,
+			'post_title' => $parent->post_title,
+			'post_content' => $parent->post_content,
+			'post_excerpt' => $parent->post_excerpt,
 		));
 	}
 	// update time
