@@ -178,6 +178,13 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 			'post_content' => $parent->post_content,
 			'post_excerpt' => $parent->post_excerpt,
 		));
+		$parent_custom = get_post_custom($parent_ID);
+		foreach($parent_custom as $custom_key => $custom_value){
+			delete_post_meta($post_ID,$custom_key);
+			foreach($custom_value as $meta_value){
+				add_post_meta($post_ID,$custom_key,$meta_value);
+			}
+		}
 	}
 	// update time
 	sfhiv_service_time_of_day_save_post_update($post_ID);
