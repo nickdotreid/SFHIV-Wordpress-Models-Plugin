@@ -134,13 +134,6 @@ function sfhiv_location_choose_location_meta_box($post){
 }
 
 function sfhiv_location_location_list($post,$args=array()){
-	$args = array_merge(array(
-		'field_name' => 'sfhiv_location',
-	),$args);
-	$locations = get_posts(array(
-		'post_type'=>'sfhiv_location',
-		'nopaging' => true,
-	));
 	$connected_location = new WP_Query( array(
 		'connected_type' => 'related_location',
 		'connected_items' => $post->ID,
@@ -149,16 +142,28 @@ function sfhiv_location_location_list($post,$args=array()){
 	foreach($connected_location->posts as $location){
 		$connected_ids[] = $location->ID;
 	}
+	sfhiv_location_location_list_draw($connected_ids,$args);
+}
+
+function sfhiv_location_location_list_draw($connected_ids,$args=array()){
+	$args = array_merge(array(
+		'field_name' => 'sfhiv_location',
+	),$args);
 	?>
-	<ul class="sfhiv_location list">
+	<select class="sfhiv_location list" name="<?=$args['field_name'];?>">
+		<option value="">No Location</option>
 	<?
+	$locations = get_posts(array(
+		'post_type'=>'sfhiv_location',
+		'nopaging' => true,
+	));
 	foreach($locations as $location){
 		$location_args = array_merge(array(),$args);
 		if(in_array($location->ID,$connected_ids)) $location_args['selected']=true;
 		sfhiv_location_list_item($location,$location_args);
 	}
 	?>
-	</ul>
+	</select>
 	<?
 	if(!isset($args['hide_create_button'])):
 	?>
@@ -169,11 +174,7 @@ function sfhiv_location_location_list($post,$args=array()){
 
 function sfhiv_location_list_item($location,$args = array()){
 	?>
-	<li class="sfhiv_location">
-		<label class="radio">
-			<input type="radio" <?	if($args['selected']) echo 'checked="checked"';	?> name="<?=$args['field_name'];?>" value="<?=$location->ID;?>"><?=apply_filters('the_title',$location->post_title);?></label>
-		</label>
-	</li>
+	<option <?	if($args['selected']) echo 'selected="true"';	?> value="<?=$location->ID;?>"><?=apply_filters('the_title',$location->post_title);?></option>
 	<?
 }
 
