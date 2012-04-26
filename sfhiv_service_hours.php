@@ -219,7 +219,6 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 		$seconds = sfhiv_service_hours_string_to_time($post_data['end']);
 		update_post_meta($post_ID, 'sfhiv_service_end', $seconds);
 	}
-	
 	if(isset($post_data['sfhiv_location'])){
 		sfhiv_location_relation_save($post_ID,$post_data['sfhiv_location']);
 	}

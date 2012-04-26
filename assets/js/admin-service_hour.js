@@ -10,7 +10,7 @@ jQuery(document).ready(function($){
 	});
 	$('form').submit(function(){
 		$(".service_hour",$(this)).each(function(index){
-			$("input",$(this)).each(function(){
+			$("input,select,textarea",$(this)).each(function(){
 				this.name = this.name.replace(/position/gi,index);
 			});
 		});
