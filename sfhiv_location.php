@@ -61,28 +61,36 @@ function sfhiv_location_metabox($post){
 	sfhiv_location_address_form($post);
 }
 
+function sfhiv_location_get_address($post){
+	$data = array();
+	
+	$data['latitude'] = get_post_meta($post->ID, 'sfhiv_latitude',true);
+	$data['longitude'] = get_post_meta($post->ID, 'sfhiv_longitude',true);
+	$data['room'] = get_post_meta($post->ID, 'sfhiv_room',true);
+	$data['address'] = get_post_meta($post->ID, 'sfhiv_address',true);
+	$data['zip_code'] = get_post_meta($post->ID, 'sfhiv_zip_code',true);
+	$data['hint'] = get_post_meta($post->ID, 'sfhiv_location_hint',true);
+	$data['city'] = get_post_meta($post->ID, 'sfhiv_city',true);
+	if(!$data['city']){
+		$data['city'] = 'San Francisco';
+	}
+	$data['state'] = get_post_meta($post->ID, 'sfhiv_state',true);
+	if(!$data['state']){
+		$data['state'] = 'California';
+	}
+	$data['country'] = get_post_meta($post->ID, 'sfhiv_country',true);
+	if(!$data['country']){
+		$data['country'] = 'United States';
+	}
+	return $data;
+}
+
 function sfhiv_location_address_form($post,$args=array()){
 	$args = array_merge(array(
 		'prefix' => 'sfhiv_location',
 	),$args);
-	$latitude = get_post_meta($post->ID, 'sfhiv_latitude',true);
-	$longitude = get_post_meta($post->ID, 'sfhiv_longitude',true);
-	$room = get_post_meta($post->ID, 'sfhiv_room',true);
-	$address = get_post_meta($post->ID, 'sfhiv_address',true);
-	$zip_code = get_post_meta($post->ID, 'sfhiv_zip_code',true);
-	$hint = get_post_meta($post->ID, 'sfhiv_location_hint',true);
-	$city = get_post_meta($post->ID, 'sfhiv_city',true);
-	if(!$city){
-		$city = 'San Francisco';
-	}
-	$state = get_post_meta($post->ID, 'sfhiv_state',true);
-	if(!$state){
-		$state = 'California';
-	}
-	$country = get_post_meta($post->ID, 'sfhiv_country',true);
-	if(!$country){
-		$country = 'United States';
-	}
+	$address = sfhiv_location_get_address($post);
+	extract($address);
 	?>
 	<fieldset class="sfhiv_location address">
 		<legend>Address</legend>
