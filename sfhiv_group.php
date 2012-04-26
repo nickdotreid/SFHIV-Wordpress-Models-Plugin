@@ -8,7 +8,7 @@ function sfhiv_create_group_type() {
 				'name' => __( 'Groups' ),
 				'singular_name' => __( 'Group' )
 			),
-		'public' => false,
+		'public' => true,
 		'show_ui' => true,
 		'has_archive' => false,
 		'hierarchical' => false,
