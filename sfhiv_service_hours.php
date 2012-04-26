@@ -29,7 +29,11 @@ function sfhiv_add_service_hours_type(){
 	) );
 }
 
-include_once('sfhiv_service_hours_query.php');
+add_action( 'pre_get_posts', 'sfhiv_service_hour_query_no_paging', 5 );
+function sfhiv_service_hour_query_no_paging( $query ) {
+    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return;
+    $query->set( 'nopaging', true );
+}
 
 function sfhiv_add_service_hours_meta_boxes(){
 	add_meta_box( 'service_hours_time', 'Service Time', 'sfhiv_services_hours_op_meta', 'sfhiv_service_hour' );
