@@ -85,6 +85,7 @@ function sfhiv_service_time_box($post){
 				'days' => sfhiv_service_get_service_days($hour),
 				'start' => $start,
 				'end' => $end,
+				'locations' => array(sfhiv_service_get_location_id($hour)),
 			));
 		}
 	}
@@ -108,11 +109,19 @@ function sfhiv_service_get_service_days($post){
 	));
 }
 
+function sfhiv_service_get_location_id($post){
+	$location = sfhiv_location_get_related_location($post->ID);
+	if($location){
+		return $location->ID;
+	}
+	return 0;
+}
+
 function sfhiv_service_draw_service_hour_form($data=array()){
 	echo '<div class="service_hour">';
 	sfhiv_draw_services_hours_op_meta($data['days'],'hours[position]');
 	sfhiv_draw_service_hours_time_meta($data['start'], $data['end'],'hours[position]');
-	sfhiv_location_location_list($data,array(
+	sfhiv_location_location_list_draw($data['locations'],array(
 		'field_name' => 'hours[position][sfhiv_location]',
 		));
 	echo '</div>';
