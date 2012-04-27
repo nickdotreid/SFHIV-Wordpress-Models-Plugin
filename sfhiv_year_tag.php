@@ -15,8 +15,8 @@ function sfhiv_create_year_tag() {
 
   register_taxonomy('sfhiv_year',array(
 	'sfhiv_group',
-	'sfhiv_report',
-	'event'
+	'sfhiv_document',
+	'sfhiv_event'
 	),array(
     'hierarchical' => false,
     'labels' => $labels
