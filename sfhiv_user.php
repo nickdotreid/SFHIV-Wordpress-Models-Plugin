@@ -23,6 +23,27 @@ function sfhiv_save_user_telephone( $user_id ) {
 	update_usermeta( $user_id, 'sfhiv_telephone', $_POST['sfhiv_telephone'] );
 }
 
+add_action( 'show_user_profile', 'sfhiv_user_suffix', 1 );
+add_action( 'edit_user_profile', 'sfhiv_user_suffix', 1 );
+function sfhiv_user_suffix($user){
+	?>
+	<table class="form-table">
+		<tr>
+		<th><label for="sfhiv_suffix">Suffix <span class="description">Displayed after last name</span></label></th>
+		<td>
+			<input type="text" name="sfhiv_suffix" id="sfhiv_suffix" value="<?php echo esc_attr( get_the_author_meta( 'sfhiv_suffix', $user->ID ) ); ?>" class="regular-text" />
+		</td>
+		</tr>
+	</table>
+	<?
+}
+add_action( 'personal_options_update', 'sfhiv_save_user_suffix' );
+add_action( 'edit_user_profile_update', 'sfhiv_save_user_suffix' );
+function sfhiv_save_user_suffix( $user_id ) {
+	if ( !current_user_can( 'edit_user', $user_id ) )
+		return FALSE;
+	update_usermeta( $user_id, 'sfhiv_suffix', $_POST['sfhiv_suffix'] );
+}
 
 
 add_action( 'show_user_profile', 'sfhiv_user_title' );
