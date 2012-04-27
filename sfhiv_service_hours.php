@@ -29,12 +29,6 @@ function sfhiv_add_service_hours_type(){
 	) );
 }
 
-add_action( 'pre_get_posts', 'sfhiv_service_hour_query_no_paging', 5 );
-function sfhiv_service_hour_query_no_paging( $query ) {
-    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return;
-    $query->set( 'nopaging', true );
-}
-
 function sfhiv_add_service_hours_meta_boxes(){
 	add_meta_box( 'service_hours_time', 'Service Time', 'sfhiv_services_hours_op_meta', 'sfhiv_service_hour' );
 	sfhiv_location_add_choose_location_meta_box('sfhiv_service_hour');
@@ -156,6 +150,7 @@ function sfhiv_service_hour_time_save($post_ID,$post){
 			}
 		}
 	}
+	sfhiv_service_hours_set_order();
 }
 
 function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_ID=false){
@@ -224,6 +219,40 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 	}
 	if(isset($post_data['day_of_week'])){
 		 wp_set_object_terms( $post_ID, $post_data['day_of_week'], 'sfhiv_day_of_week_taxonomy', false );
+	}
+}
+
+function sfhiv_service_hours_set_order(){
+	$query = new WP_Query(array(
+		'post_type' => 'sfhiv_service_hour',
+		'nopaging' => true,
+	));
+	usort($query->posts,function($a,$b){
+		$day_terms = get_terms( "sfhiv_day_of_week_taxonomy", array(
+			"hide_empty" => false,
+			));
+		foreach($day_terms as $term){
+			if(has_term($term,'sfhiv_day_of_week_taxonomy',$a) && has_term($term,'sfhiv_day_of_week_taxonomy',$b)){
+				if(sfhiv_service_get_start_time($a) > sfhiv_service_get_start_time($b)){
+					return 1;
+				}else{
+					return -1;
+				}
+			}
+			if(has_term($term,'sfhiv_day_of_week_taxonomy',$a)){
+				return -1;
+			}
+			if(has_term($term,'sfhiv_day_of_week_taxonomy',$b)){
+				return 1;
+			}
+		}
+		return 0;
+	});
+	foreach($query->posts as $index => $post){
+		wp_update_post(array(
+			'ID' => $post->ID,
+			'menu_order' => $index,
+		));
 	}
 }
 
