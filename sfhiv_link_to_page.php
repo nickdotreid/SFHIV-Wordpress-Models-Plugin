@@ -46,7 +46,7 @@ function sfhiv_link_to_page_save($post_ID){
 		}else{
 			delete_post_meta($post_ID,'sfhiv_link_to_page');
 		}
-	}else if(isset($_POST['sfhiv_website_link'])){
+	}else{
 		delete_post_meta($post_ID,'sfhiv_link_to_page_active');
 	}
 }
