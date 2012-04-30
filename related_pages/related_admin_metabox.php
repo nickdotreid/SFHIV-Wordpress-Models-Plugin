@@ -21,10 +21,8 @@ add_action( 'save_post', 'sfhiv_related_pages_post_save' );
 function sfhiv_related_pages_post_save($post_ID){
 	global $sfhiv_related_pages_types;
 	if(!in_array(get_post_type($post_ID),$sfhiv_related_pages_types)) return;
-	if(!isset($_POST['sfhiv_related'])) return;	// maybe should remove all if empty?
-	$existing_connections = sfhiv_get_related_pages($post_ID);
-	// remove all unconnected post types
 	
+	$existing_connections = sfhiv_get_related_pages($post_ID);
 	foreach($existing_connections->posts as $page){
 		if(!in_array($page->ID,$_POST['sfhiv_related'])){
 			p2p_delete_connection($page->p2p_id);
