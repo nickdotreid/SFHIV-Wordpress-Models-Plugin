@@ -107,6 +107,17 @@ function sfhiv_service_get_service_days($post){
 	));
 }
 
+function sfhiv_service_hour_get_parent($post){
+	$parents = new WP_Query( array(
+		'connected_type' => 'service_time',
+		'connected_items' => $post->ID,
+	));
+	if($parents->post_count > 0){
+		return $parents->posts[0];
+	}
+	return false;
+}
+
 function sfhiv_service_get_location_id($post){
 	$location = sfhiv_location_get_related_location($post->ID);
 	if($location){
@@ -131,7 +142,7 @@ function sfhiv_service_hour_ajax_hour_form() {
 	die();
 }
 
-add_action( 'save_post', 'sfhiv_service_hour_time_save' );
+add_action( 'save_post', 'sfhiv_service_hour_time_save', 200 );
 function sfhiv_service_hour_time_save($post_ID,$post){
 	if(get_post_type($post_ID) != 'sfhiv_service') return;
 	$service_hours = new WP_Query( array(

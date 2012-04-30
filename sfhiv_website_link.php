@@ -6,6 +6,7 @@ function sfhiv_website_link_add_all_boxes(){
 	sfhiv_website_link_add_meta_box('sfhiv_study');
 	sfhiv_website_link_add_meta_box('sfhiv_group');
 	sfhiv_website_link_add_meta_box('sfhiv_service');
+	sfhiv_website_link_add_meta_box('sfhiv_service_hour');
 	sfhiv_website_link_add_meta_box('sfhiv_event');
 	sfhiv_website_link_add_meta_box('post');
 	sfhiv_website_link_add_meta_box('page');
@@ -34,6 +35,7 @@ function sfhiv_website_link_meta_box($post){
 
 add_action('save_post','sfhiv_website_link_save');
 function sfhiv_website_link_save($post_ID){
+	if($_POST['ID'] != $post_ID) return;
 	if(isset($_POST['sfhiv_website_link']) && $_POST['sfhiv_website_link'] != ""){
 		update_post_meta($post_ID,'sfhiv_website_link',$_POST['sfhiv_website_link']);
 		update_post_meta($post_ID,'sfhiv_website_link_name',$_POST['sfhiv_website_link_name']);
@@ -63,9 +65,6 @@ function sfhiv_website_link_get_link($post_ID=false){
 add_filter('post_type_link','sfhiv_website_link_filter',2,2);
 add_filter('page_link','sfhiv_website_link_filter',2,2);
 function sfhiv_website_link_filter($link,$post_id){
-	if(is_admin()){
-		return $link;
-	}
 	if(is_object($post_id)){
 		$post_id = $post_id->ID;
 	}
