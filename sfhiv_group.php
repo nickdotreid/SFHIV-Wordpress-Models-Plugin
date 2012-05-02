@@ -63,6 +63,11 @@ function sfhiv_group_connection_types() {
 		'name' => 'group_events',
 		'from' => 'sfhiv_group',
 		'to' => 'sfhiv_event',
+		'title' => array( 'from' => __( 'Events in Group', 'sfhiv' ), 'to' => __( 'Group in Events', 'sfhiv' ) ),
+		'admin_box' => array(
+				'show' => 'any',
+				'context' => 'advanced'
+		),
 	));
 
 	p2p_register_connection_type( array(
@@ -75,7 +80,7 @@ function sfhiv_group_connection_types() {
 		'name' => 'group_members',
 		'from' => 'sfhiv_group',
 		'to' => 'user',
-		'title' => array( 'from' => __( 'Members in Group', 'sfhiv' ), 'to' => __( 'Groups for Member', 'sfhiv-textdomain' ) ),
+		'title' => array( 'from' => __( 'Members in Group', 'sfhiv' ), 'to' => __( 'Groups for Member', 'sfhiv' ) ),
 		'fields' => array(
 				'title' => 'Title',
 				'weight' => 'Weight',
