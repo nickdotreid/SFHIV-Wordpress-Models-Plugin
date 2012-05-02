@@ -86,6 +86,6 @@ function sfhiv_group_connection_types() {
 	));
 }
 
-include_once('sfhiv_group_member');
+include_once('sfhiv_group_member.php');
 
 ?>
