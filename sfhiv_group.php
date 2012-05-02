@@ -75,10 +75,16 @@ function sfhiv_group_connection_types() {
 		'name' => 'group_members',
 		'from' => 'sfhiv_group',
 		'to' => 'user',
+		'title' => array( 'from' => __( 'Members in Group', 'sfhiv' ), 'to' => __( 'Groups for Member', 'sfhiv-textdomain' ) ),
 		'fields' => array(
 				'title' => 'Title',
 				'weight' => 'Weight',
-			)
+				'group' => 'Grouping',
+			),
+		'admin_box' => array(
+				'show' => 'any',
+				'context' => 'advanced'
+		),
 	));
 }
 
