@@ -77,11 +77,7 @@ function sfhiv_group_connection_types() {
 		'to' => 'user',
 		'fields' => array(
 				'title' => 'Title',
-				'order' => 'Order',
-				'incomplete' => array(
-					'title' => 'Incomplete',
-					'type' => 'checkbox'
-				),
+				'weight' => 'Weight',
 			)
 	));
 }

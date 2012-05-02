@@ -75,22 +75,30 @@ function sfhiv_save_user_title( $user_id ) {
 	update_usermeta( $user_id, 'sfhiv_department', $_POST['sfhiv_department'] );
 }
 
-function sfhiv_users_sort_by_name(&$users){
-	usort($users,function($a,$b){
-		if(get_the_author_meta('user_lastname',$a->ID) > get_the_author_meta('user_lastname',$b->ID)){
-			return 1;
-		}
-		if(get_the_author_meta('user_lastname',$a->ID) < get_the_author_meta('user_lastname',$b->ID)){
-			return -1;
-		}
-		if(get_the_author_meta('user_firstname',$a->ID) > get_the_author_meta('user_firstname',$b->ID)){
-			return 1;
-		}
-		if(get_the_author_meta('user_firstname',$a->ID) < get_the_author_meta('user_firstname',$b->ID)){
-			return -1;
-		}
-		return 0;
-	});
+function sfhiv_users_sort(&$users){
+	$users = apply_filters('sfhiv_users_sort',$users);
+}
+
+add_filter('sfhiv_users_sort','sfhiv_users_sort_by_name',1);
+function sfhiv_users_sort_by_name($users){
+	usort($users,sfhiv_users_sort_by_name_cmp);
+	return $users;
+}
+
+function sfhiv_users_sort_by_name_cmp($a,$b){
+	if(get_the_author_meta('user_lastname',$a->ID) > get_the_author_meta('user_lastname',$b->ID)){
+		return 1;
+	}
+	if(get_the_author_meta('user_lastname',$a->ID) < get_the_author_meta('user_lastname',$b->ID)){
+		return -1;
+	}
+	if(get_the_author_meta('user_firstname',$a->ID) > get_the_author_meta('user_firstname',$b->ID)){
+		return 1;
+	}
+	if(get_the_author_meta('user_firstname',$a->ID) < get_the_author_meta('user_firstname',$b->ID)){
+		return -1;
+	}
+	return 0;
 }
 
 ?>
