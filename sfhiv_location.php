@@ -253,6 +253,7 @@ function sfhiv_location_get_related_location($post_ID){
 	$connected_location = new WP_Query( array(
 		'connected_type' => 'related_location',
 		'connected_items' => $post_ID,
+		'nopaging' => true,
 	));
 	if($connected_location->post_count<1) return false;
 	foreach($connected_location->posts as $post){
