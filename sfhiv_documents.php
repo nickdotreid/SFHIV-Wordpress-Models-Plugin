@@ -22,9 +22,30 @@ function sfhiv_add_documents_type(){
 			'sfhiv_population_category',
 			'sfhiv_document_category',
 			),
+		'register_meta_box_cb' => 'sfhiv_document_metaboxes',
 		)
 	);
 }
+
+function sfhiv_document_metaboxes(){
+//	wp_enqueue_script('sfhiv_event_js', get_bloginfo('stylesheet_directory') . '/models/assets/js/admin-event.js',array('jquery'));
+	add_meta_box( 'document', 'Publication Date', 'sfhiv_document_pub_box', 'sfhiv_document', 'side', 'high' );
+}
+
+function sfhiv_document_pub_box($post){
+	$pub_date = get_post_meta($post->ID, 'sfhiv_document_pub_date',true);
+	echo '<label for="sfhiv_document_pub_date">Publication Date</label>';
+	echo '<input type="text" id="sfhiv_document_pub_date" name="sfhiv_document_pub_date" value="'.date("F Y",$pub_date).'" />';
+}
+
+add_action( 'save_post', 'sfhiv_document_pub_date_save' );
+function sfhiv_document_pub_date_save($post_ID){
+	delete_post_meta($post_ID,'sfhiv_document_pub_date');
+	if(!isset($_POST['sfhiv_document_pub_date'])) return;
+	$date = strtotime($_POST['sfhiv_document_pub_date']);
+	add_post_meta($post_ID,'sfhiv_document_pub_date',$date);
+}
+
 
 add_action('init','sfhiv_add_document_category');
 function sfhiv_add_document_category(){
