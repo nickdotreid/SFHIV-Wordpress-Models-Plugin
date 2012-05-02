@@ -76,4 +76,16 @@ function sfhiv_document_query_top_level_only( $query ) {
 	if(!isset($query->query_vars['child_of']))	$query->query_vars['post_parent'] = 0;
 }
 
+function sfhiv_document_get_studies($ID=false){
+	if(!$ID){
+		$ID = get_the_ID();
+	}
+	$studies = new WP_Query( array(
+		'post_type' => 'sfhiv_study',
+		'connected_type' => 'sfhiv_study_document',
+		'connected_items' => $ID,
+	));
+	return $studies;
+}
+
 ?>
