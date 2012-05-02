@@ -20,8 +20,9 @@ function sfhiv_add_location_type(){
 	
 	p2p_register_connection_type( array(
 		'name' => 'related_location',
-		'from' => array('sfhiv_event','sfhiv_service_hour','sfhiv_group'),
+		'from' => array('sfhiv_event','sfhiv_service_hour'),
 		'to' => 'sfhiv_location',
+		'admin_column' => 'from',
 		'admin_box' => false,
 	) );
 }
@@ -132,6 +133,7 @@ function sfhiv_location_new_location_form(){
 
 function sfhiv_location_add_choose_location_meta_box($post_type=false){
 	if(!$post_type) return;
+	if(!in_array($post_type,array('sfhiv_event','sfhiv_service_hour'))) return;
 	wp_enqueue_script('sfhiv_location_js', get_bloginfo('stylesheet_directory') . '/models/assets/js/admin-location.js',array('jquery'));
 	wp_enqueue_style('sfhiv_location_css', get_bloginfo('stylesheet_directory') . '/models/assets/css/admin-location.css');
 	add_meta_box('sfhiv_location_choose','Where','sfhiv_location_choose_location_meta_box',$post_type);
