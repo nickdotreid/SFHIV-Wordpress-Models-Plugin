@@ -32,10 +32,21 @@ function sfhiv_document_metaboxes(){
 	add_meta_box( 'document', 'Publication Date', 'sfhiv_document_pub_box', 'sfhiv_document', 'side', 'high' );
 }
 
+function sfhiv_document_get_pub_date($ID=false){
+	if(!$ID){
+		$ID = get_the_ID();
+	}
+	return get_post_meta($ID, 'sfhiv_document_pub_date',true);
+}
+
 function sfhiv_document_pub_box($post){
-	$pub_date = get_post_meta($post->ID, 'sfhiv_document_pub_date',true);
+	$pub_date = sfhiv_document_get_pub_date($post->ID);
+	$value = "";
+	if($pub_date){
+		$value = date('F Y',$pub_date);
+	}
 	echo '<label for="sfhiv_document_pub_date">Publication Date</label>';
-	echo '<input type="text" id="sfhiv_document_pub_date" name="sfhiv_document_pub_date" value="'.date("F Y",$pub_date).'" />';
+	echo '<input type="text" id="sfhiv_document_pub_date" name="sfhiv_document_pub_date" value="'.$value.'" />';
 }
 
 add_action( 'save_post', 'sfhiv_document_pub_date_save' );
@@ -95,6 +106,31 @@ function sfhiv_document_query_top_level_only( $query ) {
 	if($query->query_vars['post_parent']) return;
 	if($query->is_single) return;
 	if(!isset($query->query_vars['child_of']))	$query->query_vars['post_parent'] = 0;
+}
+
+
+add_action( 'pre_get_posts', 'sfhiv_document_query_sort', 10 );
+function sfhiv_document_query_sort( $query ) {
+    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_document' ) return;
+	
+	$query->query_vars['meta_key'] = 'sfhiv_document_pub_date';
+	$query->query_vars['orderby'] = 'meta_value,ID';
+	$query->query_vars['order'] = 'DESC';
+	if(!sfhiv_document_test_query($query->query_vars)){
+		$query->query_vars['meta_key'] = '';
+		$query->query_vars['orderby'] = 'title';
+		$query->query_vars['order'] = 'ASC';
+	}
+}
+
+function sfhiv_document_test_query($args){
+	remove_action('pre_get_posts', 'sfhiv_document_query_sort', 10);
+	$query = new WP_Query($args);
+	add_action( 'pre_get_posts', 'sfhiv_document_query_sort', 10 );
+	if($query->post_count > 0){
+		return true;
+	}
+	return false;
 }
 
 function sfhiv_document_get_studies($ID=false){
