@@ -39,8 +39,8 @@ function sfhiv_event_time_box($post){
 	?>
 	<p><label>Start Day:<input id="sfhiv_event_start_date" class="sfhiv-date" type="text" name="sfhiv_event[start][date]" value="<?=date('Y-m-d',$start_time);?>" /></label></p>
 	<p><label>Start Time:<input id="sfhiv_event_start_time" class="sfhiv-time" type="text" name="sfhiv_event[start][time]" value="<?=date('g:i a',$start_time);?>" /></label></p>
-	<p><label>End Day:<input id="sfhiv_event_end_date" class="sfhiv-date" type="text" name="sfhiv_event_end_day[end][date]" value="<?=date('Y-m-d',$end_time);?>" /></label></p>
-	<p><label>End Time:<input id="sfhiv_event_end_time" class="sfhiv-time" type="text" name="sfhiv_event_end_time[end][time]" value="<?=date('g:i a',$end_time);?>" /></label></p>
+	<p><label>End Day:<input id="sfhiv_event_end_date" class="sfhiv-date" type="text" name="sfhiv_event[end][date]" value="<?=date('Y-m-d',$end_time);?>" /></label></p>
+	<p><label>End Time:<input id="sfhiv_event_end_time" class="sfhiv-time" type="text" name="sfhiv_event[end][time]" value="<?=date('g:i a',$end_time);?>" /></label></p>
 	<?
 }
 
@@ -49,7 +49,7 @@ function sfhiv_event_time_save($post_ID){
 	if(get_post_type($post_ID) != 'sfhiv_event') return;
 	$start_time = sfhiv_event_save_time($post_ID,'sfhiv_event_start',$_POST['sfhiv_event']['start']);
 	$end_time = sfhiv_event_save_time($post_ID,'sfhiv_event_end',$_POST['sfhiv_event']['end']);
-	
+
 	if($start_time && $end_time && $end_time<$start_time){
 		update_post_meta($post_ID, 'sfhiv_event_end', $start_time);
 	}
