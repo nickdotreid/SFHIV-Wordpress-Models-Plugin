@@ -11,18 +11,25 @@ function sfhiv_create_group_type() {
 		'public' => true,
 		'show_ui' => true,
 		'has_archive' => false,
-		'hierarchical' => false,
+		'hierarchical' => true,
 		'exclude_from_search' => true,
 		'rewrite' => array(
 			'slug' => 'groups',
 			'feeds' => false,
 		),
-		'capability_type' => 'post',
+		'capability_type' => 'page',
 		'supports' => array('title','editor','thumbnail','excerpt','page-attributes'),
 		'can_export' => true,
 		'register_meta_box_cb' => 'sfhiv_add_groups_meta_boxes',
 		)
 	);
+}
+
+add_action( 'pre_get_posts', 'sfhiv_group_sort_order', 5 );
+function sfhiv_group_sort_order( $query ) {
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_group' ) return;
+	$query->query_vars['orderby'] = 'menu_order title date';
+	$query->query_vars['order'] = 'ASC';
 }
 
 function sfhiv_add_groups_meta_boxes(){
