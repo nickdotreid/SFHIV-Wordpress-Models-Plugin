@@ -29,6 +29,13 @@ function sfhiv_add_service_hours_type(){
 	) );
 }
 
+add_action( 'pre_get_posts', 'sfhiv_service_hour_sort_order', 5 );
+function sfhiv_service_hour_sort_order( $query ) {
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return;
+	$query->query_vars['orderby'] = 'menu_order title date';
+	$query->query_vars['order'] = 'ASC';
+}
+
 function sfhiv_add_service_hours_meta_boxes(){
 	add_meta_box( 'service_hours_time', 'Service Time', 'sfhiv_services_hours_op_meta', 'sfhiv_service_hour' );
 	sfhiv_location_add_choose_location_meta_box('sfhiv_service_hour');
