@@ -101,5 +101,6 @@ function sfhiv_group_connection_types() {
 }
 
 include_once('sfhiv_group_member.php');
+include_once('sfhiv_group_event.php');
 
 ?>
