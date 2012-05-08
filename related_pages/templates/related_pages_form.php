@@ -1,3 +1,5 @@
+<label for="sfhiv_related_title">Title</label>
+<input id="sfhiv_related_title" name="sfhiv_related_title" value="<?=$related_title;?>" />
 <ul id="sfhiv_related_pages_current" class="related_pages list">
 	<?	foreach($related_items->posts as $item):	?>
 	<?	include('related_page_item.php');	?>

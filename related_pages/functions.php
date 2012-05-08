@@ -16,6 +16,15 @@ function sfhiv_has_related_pages($ID=false){
 	return false;
 }
 
+function sfhiv_get_related_title($id=false){
+	if(!$ID){
+		$ID = get_the_ID();
+	}
+	$related_title = get_post_meta($ID,'sfhiv_related_title',true);
+	if($related_title && $related_title != '') return $related_title;
+	return false;
+}
+
 function sfhiv_get_related_pages($id=false){
 	global $sfhiv_related_pages_types;
 	if(!$ID){

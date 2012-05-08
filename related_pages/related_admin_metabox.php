@@ -13,6 +13,7 @@ function sfhiv_related_pages_setup_metabox(){
 }
 
 function sfhiv_related_pages_metabox($post){
+	$related_title = sfhiv_get_related_title($post->ID);
 	$related_items = sfhiv_get_related_pages($post->ID);
 	include_once('templates/related_pages_form.php');
 }
@@ -27,6 +28,11 @@ function sfhiv_related_pages_post_save($post_ID){
 		if(!in_array($page->ID,$_POST['sfhiv_related'])){
 			p2p_delete_connection($page->p2p_id);
 		}
+	}
+	
+	if(isset($_POST['sfhiv_related_title'])){
+		delete_post_meta($post_ID,'sfhiv_related_title');
+		add_post_meta($post_ID,'sfhiv_related_title',$_POST['sfhiv_related_title'],true);
 	}
 	
 	foreach($_POST['sfhiv_related'] as $index => $related_ID){
