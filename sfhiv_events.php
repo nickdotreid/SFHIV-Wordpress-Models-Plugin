@@ -90,6 +90,7 @@ function sfhiv_add_event_category(){
 add_action('parse_query','sfhiv_event_query_set_vars');
 function sfhiv_event_query_set_vars($query){
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
+	if(isset($query->query_vars['sfhiv_event_selection'])) return;
 	$query->set("sfhiv_event_selection","future");
 	if(isset($_GET['sfhiv_event_time'])){
 		switch($_GET['sfhiv_event_time']){
@@ -107,8 +108,7 @@ function sfhiv_event_query_set_vars($query){
 
 add_action( 'pre_get_posts', 'sfhiv_event_order_query', 5 );
 function sfhiv_event_order_query( $query ) {
-    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
-
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
     $query->set( 'meta_key', 'sfhiv_event_start' );
 	$query->set( 'orderby', 'meta_value_num' );
 	switch($query->query_vars['sfhiv_event_selection']){
@@ -116,19 +116,16 @@ function sfhiv_event_order_query( $query ) {
 			$query->set( 'order', 'ASC' );
 			break;
 		default:
-			console("sort down");
 			$query->set( 'order', 'DESC' );
 			break;
 	}
 }
 
-add_action( 'pre_get_posts', 'sfhiv_event_query_update', 4 );
+add_action( 'pre_get_posts', 'sfhiv_event_query_update', 7 );
 function sfhiv_event_query_update($query){
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
-	console("HELLO ".$query->query_vars['post_type']);
 	
-	remove_action( 'pre_get_posts', 'sfhiv_event_query_update', 4 );
-	remove_action( 'pre_get_posts', 'sfhiv_event_order_query', 5 );
+	remove_action( 'pre_get_posts', 'sfhiv_event_query_update', 7 );
 	remove_action('parse_query','sfhiv_event_query_set_vars');
 	
 	switch($query->query_vars['sfhiv_event_selection']){
@@ -156,12 +153,12 @@ function sfhiv_event_query_update($query){
 				$query->set("sfhiv_event_selection","past");
 				break;
 			}
+			
 		default:
 			$query->set( 'meta_query', array() );
 	}
 	
-	add_action( 'pre_get_posts', 'sfhiv_event_query_update', 4 );
-	add_action( 'pre_get_posts', 'sfhiv_event_order_query', 5 );
+	add_action( 'pre_get_posts', 'sfhiv_event_query_update', 7 );
 	add_action('parse_query','sfhiv_event_query_set_vars');
 }
 
