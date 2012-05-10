@@ -94,7 +94,7 @@ function sfhiv_event_query_set_vars($query){
 	$query->set("sfhiv_event_selection","future");
 	if(isset($_GET['sfhiv_event_time'])){
 		switch($_GET['sfhiv_event_time']){
-			case "upcoming":
+			case "future":
 				$query->set("sfhiv_event_selection","future");
 				break;
 			case "past":
@@ -157,7 +157,7 @@ function sfhiv_event_query_update($query){
 		default:
 			$query->set( 'meta_query', array() );
 	}
-	
+	sfhiv_event_order_query( &$query );
 	add_action( 'pre_get_posts', 'sfhiv_event_query_update', 7 );
 	add_action('parse_query','sfhiv_event_query_set_vars');
 }
