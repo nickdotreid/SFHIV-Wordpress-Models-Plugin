@@ -22,4 +22,11 @@ function sfhiv_add_faq_type(){
 	);
 }
 
+add_action( 'pre_get_posts', 'sfhiv_faq_order_query', 5 );
+function sfhiv_faq_order_query( $query ) {
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_faq' ) return;
+	$query->set( 'orderby', 'menu_order' );
+	$query->set( 'order', 'ASC' );
+}
+
 ?>
