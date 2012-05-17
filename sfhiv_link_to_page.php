@@ -20,8 +20,6 @@ function sfhiv_link_to_page_meta_box($post){
 		'nopaging' => true,
 	));
 	
-	console(sfhiv_link_to_page_get_page($post->ID));
-	
 	?>
 	<p>
 	<label class="checkbox"><input type="checkbox" name="sfhiv_link_to_page_active" value="true" <? if($active) echo 'checked="checked"';	?> />Link to Page</label>
