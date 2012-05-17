@@ -1,5 +1,32 @@
 <?php
 
+add_action( 'show_user_profile', 'sfhiv_user_show_bio' );
+add_action( 'edit_user_profile', 'sfhiv_user_show_bio' );
+function sfhiv_user_show_bio($user){
+	?>
+	<table class="form-table">
+		<tr>
+		<th></th>
+		<td>
+			<input type="checkbox" name="sfhiv_show_bio" id="sfhiv_show_bio" value="true" <? if(get_the_author_meta( 'sfhiv_show_bio', $user->ID )) echo "checked='checked'";	?> />
+			<label for="sfhiv_show_bio">Make Bio Page View able</label>
+		</td>
+		</tr>
+	</table>
+	<?
+}
+add_action( 'personal_options_update', 'sfhiv_save_show_bio' );
+add_action( 'edit_user_profile_update', 'sfhiv_save_show_bio' );
+function sfhiv_save_show_bio( $user_id ) {
+	if ( !current_user_can( 'edit_user', $user_id ) )
+		return FALSE;
+	if(isset($_POST['sfhiv_show_bio'])){
+		update_usermeta( $user_id, 'sfhiv_show_bio', true );
+	}else{
+		delete_usermeta($user_id,'sfhiv_show_bio');
+	}
+}
+
 add_action( 'show_user_profile', 'sfhiv_user_telephone' );
 add_action( 'edit_user_profile', 'sfhiv_user_telephone' );
 function sfhiv_user_telephone($user){
