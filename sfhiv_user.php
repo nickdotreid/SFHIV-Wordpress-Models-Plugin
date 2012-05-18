@@ -67,6 +67,33 @@ function sfhiv_save_show_bio( $user_id ) {
 	}
 }
 
+add_action( 'show_user_profile', 'sfhiv_user_show_contact_info' );
+add_action( 'edit_user_profile', 'sfhiv_user_show_contact_info' );
+function sfhiv_user_show_contact_info($user){
+	?>
+	<table class="form-table">
+		<tr>
+		<th></th>
+		<td>
+			<input type="checkbox" name="sfhiv_show_contact_info" id="sfhiv_show_contact_info" value="true" <? if(get_the_author_meta( 'sfhiv_show_contact_info', $user->ID )) echo "checked='checked'";	?> />
+			<label for="sfhiv_show_contact_info">Show contact information</label>
+		</td>
+		</tr>
+	</table>
+	<?
+}
+add_action( 'personal_options_update', 'sfhiv_save_show_contact_info' );
+add_action( 'edit_user_profile_update', 'sfhiv_save_show_contact_info' );
+function sfhiv_save_show_contact_info( $user_id ) {
+	if ( !current_user_can( 'edit_user', $user_id ) )
+		return FALSE;
+	if(isset($_POST['sfhiv_show_contact_info'])){
+		update_usermeta( $user_id, 'sfhiv_show_contact_info', true );
+	}else{
+		delete_usermeta($user_id,'sfhiv_show_contact_info');
+	}
+}
+
 
 function sfhiv_users_sort(&$users){
 	$users = apply_filters('sfhiv_users_sort',$users);
