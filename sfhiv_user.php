@@ -1,5 +1,29 @@
 <?php
 
+function sfhiv_author_page_get_user(){
+	global $wp_query;
+	if(!is_author()) return false;
+	$author_id = $wp_query->query_vars['author'];
+	return get_userdata(intval($author_id));
+}
+
+function add_edit_user_admin_bar_link() {
+	global $wp_admin_bar,$author,$wp_query;
+	if(!is_author()) return;
+	$user = sfhiv_author_page_get_user();
+	if(!$user || !is_user_logged_in() || 
+			!(current_user_can( 'edit_users' ) || get_current_user_id()==$user->ID))
+			return;
+	if ( !is_admin_bar_showing() )
+		return;
+	$wp_admin_bar->add_menu( array(
+	'id' => 'edit_author_link',
+	'title' => __( 'Edit Profile'),
+	'href' => __("/wp-admin/user-edit.php?user_id=".$user->ID),
+	) );
+}
+add_action('admin_bar_menu', 'add_edit_user_admin_bar_link',125);
+
 add_action( 'show_user_profile', 'sfhiv_user_show_bio' );
 add_action( 'edit_user_profile', 'sfhiv_user_show_bio' );
 function sfhiv_user_show_bio($user){
