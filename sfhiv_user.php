@@ -1,5 +1,13 @@
 <?php
 
+add_filter('user_contactmethods','sfhiv_no_contact_info');
+function sfhiv_no_contact_info($contact_methods){
+	unset($contact_methods['aim']);
+	unset($contact_methods['yim']);
+	unset($contact_methods['jabber']);
+	return $contact_methods;
+}
+
 function sfhiv_author_page_get_user(){
 	global $wp_query;
 	if(!is_author()) return false;
