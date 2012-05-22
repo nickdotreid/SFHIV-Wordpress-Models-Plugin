@@ -18,7 +18,7 @@ function sfhiv_create_year_tag() {
 	'sfhiv_document',
 	'sfhiv_event'
 	),array(
-    'hierarchical' => false,
+    'hierarchical' => true,
     'labels' => $labels
   ));
 }
