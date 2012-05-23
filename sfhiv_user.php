@@ -8,10 +8,10 @@ function sfhiv_no_contact_info($contact_methods){
 	
 	$contact_methods['sfhiv_suffix'] = 'Suffix';
 	$contact_methods['sfhiv_telephone'] = 'Telephone';
+	$contact_methods['sfhiv_website'] = 'Profile URL';
 	
 	$contact_methods['sfhiv_title'] = 'Title';
 	$contact_methods['sfhiv_department'] = 'Department';
-	
 	
 	return $contact_methods;
 }
@@ -39,33 +39,6 @@ function add_edit_user_admin_bar_link() {
 	) );
 }
 add_action('admin_bar_menu', 'add_edit_user_admin_bar_link',125);
-
-add_action( 'show_user_profile', 'sfhiv_user_show_bio' );
-add_action( 'edit_user_profile', 'sfhiv_user_show_bio' );
-function sfhiv_user_show_bio($user){
-	?>
-	<table class="form-table">
-		<tr>
-		<th></th>
-		<td>
-			<input type="checkbox" name="sfhiv_show_bio" id="sfhiv_show_bio" value="true" <? if(get_the_author_meta( 'sfhiv_show_bio', $user->ID )) echo "checked='checked'";	?> />
-			<label for="sfhiv_show_bio">Make Bio Page View able</label>
-		</td>
-		</tr>
-	</table>
-	<?
-}
-add_action( 'personal_options_update', 'sfhiv_save_show_bio' );
-add_action( 'edit_user_profile_update', 'sfhiv_save_show_bio' );
-function sfhiv_save_show_bio( $user_id ) {
-	if ( !current_user_can( 'edit_user', $user_id ) )
-		return FALSE;
-	if(isset($_POST['sfhiv_show_bio'])){
-		update_usermeta( $user_id, 'sfhiv_show_bio', true );
-	}else{
-		delete_usermeta($user_id,'sfhiv_show_bio');
-	}
-}
 
 add_action( 'show_user_profile', 'sfhiv_user_show_contact_info' );
 add_action( 'edit_user_profile', 'sfhiv_user_show_contact_info' );
