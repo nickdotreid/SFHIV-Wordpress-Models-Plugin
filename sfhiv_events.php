@@ -5,8 +5,8 @@ function sfhiv_add_events_type(){
 	register_post_type( 'sfhiv_event',
 		array(
 			'labels' => array(
-				'name' => __( 'Events' ),
-				'singular_name' => __( 'Event' )
+				'name' => __( 'Meetings' ),
+				'singular_name' => __( 'Meeting' )
 			),
 		'public' => true,
 		'has_archive' => true,
