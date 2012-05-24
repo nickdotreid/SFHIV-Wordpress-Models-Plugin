@@ -92,6 +92,10 @@ function sfhiv_group_connection_types() {
 				'title' => 'Title',
 				'weight' => 'Weight',
 				'group' => 'Grouping',
+				'show_contact_info' => array(
+					'title' => 'Contactable',
+					'type' => 'checkbox',
+				),
 			),
 		'admin_box' => array(
 				'show' => 'any',
