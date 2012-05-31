@@ -64,8 +64,8 @@ function sfhiv_service_hours_string_to_time($string){
 }
 
 function sfhiv_add_services_meta_boxes(){
-	wp_enqueue_script('sfhiv_service_hour_js', get_bloginfo('stylesheet_directory') . '/models/assets/js/admin-service_hour.js',array('jquery'));
-	wp_enqueue_style('sfhiv_service_hour_css', get_bloginfo('stylesheet_directory') . '/models/assets/css/admin-service_hour.css');
+	wp_enqueue_script('sfhiv_service_hour_js', plugins_url('assets/js/admin-service_hour.js',__FILE__),array('jquery'));
+	wp_enqueue_style('sfhiv_service_hour_css', plugins_url('assets/css/admin-service_hour.css',__FILE__));
 	add_meta_box( 'service_time', 'Time', 'sfhiv_service_time_box', 'sfhiv_service' );
 }
 
