@@ -51,7 +51,7 @@ function sfhiv_add_neighborhood_tag(){
   ));
 }
 
-add_filter("manage_posts_columns",'sfhiv_location_add_admin_columns');
+add_filter("manage_sfhiv_location_posts_columns",'sfhiv_location_add_admin_columns');
 function sfhiv_location_add_admin_columns($defaults){
 	$defaults['room'] = 'Room';
 	$defaults['address'] = 'Street Address';
@@ -61,7 +61,7 @@ function sfhiv_location_add_admin_columns($defaults){
 //	$defaults['country'] = 'Country';
 	return $defaults;
 }
-add_filter("manage_posts_custom_column",'sfhiv_location_add_admin_columns_content',10,2);
+add_action("manage_sfhiv_location_posts_custom_column",'sfhiv_location_add_admin_columns_content',10,2);
 function sfhiv_location_add_admin_columns_content($column_name,$post_ID){
 	$address = sfhiv_location_get_address(get_post($post_ID));
 	if(isset($address[$column_name])){
