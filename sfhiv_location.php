@@ -51,6 +51,25 @@ function sfhiv_add_neighborhood_tag(){
   ));
 }
 
+add_filter("manage_posts_columns",'sfhiv_location_add_admin_columns');
+function sfhiv_location_add_admin_columns($defaults){
+	$defaults['room'] = 'Room';
+	$defaults['address'] = 'Street Address';
+	$defaults['zip_code'] = 'Zip Code';
+//	$defaults['city'] = 'City';
+//	$defaults['state'] = 'State';
+//	$defaults['country'] = 'Country';
+	return $defaults;
+}
+add_filter("manage_posts_custom_column",'sfhiv_location_add_admin_columns_content',10,2);
+function sfhiv_location_add_admin_columns_content($column_name,$post_ID){
+	$address = sfhiv_location_get_address(get_post($post_ID));
+	if(isset($address[$column_name])){
+		echo $address[$column_name];
+	}
+}
+
+
 function sfhiv_add_locations_meta_boxes(){
 	wp_enqueue_style('sfhiv_location_css', plugins_url('assets/css/admin-location.css',__FILE__));
 	//	load google maps
