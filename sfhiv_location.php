@@ -136,7 +136,7 @@ function sfhiv_location_add_choose_location_meta_box($post_type=false){
 	if(!in_array($post_type,array('sfhiv_event','sfhiv_service_hour'))) return;
 	wp_enqueue_script('sfhiv_location_js', plugins_url('assets/js/admin-location.js',__FILE__),array('jquery'));
 	wp_enqueue_style('sfhiv_location_css', plugins_url('assets/css/admin-location.css',__FILE__));
-	add_meta_box('sfhiv_location_choose','Where','sfhiv_location_choose_location_meta_box',$post_type);
+	add_meta_box('sfhiv_location_choose','Where','sfhiv_location_choose_location_meta_box',$post_type,'side','high');
 }
 
 function sfhiv_location_choose_location_meta_box($post){
