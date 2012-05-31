@@ -1,5 +1,5 @@
 jQuery(document).ready(function($){
-	jQuery(".sfhiv_location.new.button").click(function(event){
+	$('form').delegate(".sfhiv_location.new.button","click",function(event){
 		event.preventDefault();
 		var button = jQuery(this);
 		jQuery.post(ajaxurl, {
@@ -9,8 +9,7 @@ jQuery(document).ready(function($){
 				jQuery('.sfhiv_location.list',button.parent()).hide();
 				button.after(response);
 			});
-	});
-	$('form').delegate("form.sfhiv_location .close",'click',function(event){
+	}).delegate("form.sfhiv_location .close",'click',function(event){
 		event.preventDefault();
 		$('.sfhiv_location').show();
 		$(this).parents("form:first").remove();
@@ -22,6 +21,7 @@ jQuery(document).ready(function($){
 			function(response){
 				$('.sfhiv_location').show();
 				$('.sfhiv_location.list',form.parent()).append(response);
+				$('.sfhiv_location.list option:last',form.parent()).attr("selected","true");
 				form.remove();
 		});
 		form.hide();
