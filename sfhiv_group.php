@@ -30,6 +30,7 @@ function sfhiv_group_sort_order( $query ) {
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_group' ) return;
 	$query->query_vars['orderby'] = 'menu_order title date';
 	$query->query_vars['order'] = 'ASC';
+	$query->query_vars['nopaging'] = true;
 }
 
 function sfhiv_add_groups_meta_boxes(){
