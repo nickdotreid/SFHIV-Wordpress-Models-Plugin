@@ -8,12 +8,7 @@ function sfhiv_add_service_hours_type(){
 				'name' => __( 'Service Times' ),
 				'singular_name' => __( 'Service Time' )
 			),
-		'public' => true,
-		'has_archive' => false,
-		'rewrite' => array(
-			'slug' => 'services',
-			'feeds' => false,
-		),
+		'public' => false,
 		'hierarchical' => false,
 		'taxonomies' => array('sfhiv_service_category','sfhiv_population_category'),
 		'supports' => array('title','editor','excerpt'),
