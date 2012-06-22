@@ -6,7 +6,17 @@ function sfhiv_add_documents_type(){
 		array(
 			'labels' => array(
 				'name' => __( 'Documents' ),
-				'singular_name' => __( 'Document' )
+				'singular_name' => __( 'Document' ),
+				'add_new' => __('Add New','document'),
+				'add_new_item' => __('Add New Document'),
+				'edit_item' => __('Edit Document'),
+				'new_item' => __('New Document'),
+				'all_items' => __('All Documents'),
+				'view_item' => __('View Document'),
+				'search_items' => __('Search Documents'),
+				'not_found' => __('No documents found'),
+				'not_found_in_trash' => __('No documents found in Trash'),
+				'menu_name' => 'Documents',
 			),
 		'public' => true,
 		'has_archive' => true,
