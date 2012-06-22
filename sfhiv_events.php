@@ -6,7 +6,17 @@ function sfhiv_add_events_type(){
 		array(
 			'labels' => array(
 				'name' => __( 'Meetings' ),
-				'singular_name' => __( 'Meeting' )
+				'singular_name' => __( 'Meeting' ),
+				'add_new' => __('Add New','meeting'),
+				'add_new_item' => __('Add New Meeting'),
+				'edit_item' => __('Edit Meeting'),
+				'new_item' => __('New Meeting'),
+				'all_items' => __('All Meetings'),
+				'view_item' => __('View Meeting'),
+				'search_items' => __('Search Meetings'),
+				'not_found' => __('No meetings found'),
+				'not_found_in_trash' => __('No meetings found in Trash'),
+				'menu_name' => 'Meetings',
 			),
 		'public' => true,
 		'has_archive' => true,

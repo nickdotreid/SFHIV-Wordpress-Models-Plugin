@@ -6,7 +6,17 @@ function sfhiv_add_location_type(){
 		array(
 			'labels' => array(
 				'name' => __( 'Locations' ),
-				'singular_name' => __( 'Location' )
+				'singular_name' => __( 'Location' ),
+				'add_new' => __('Add New','location'),
+				'add_new_item' => __('Add New Location'),
+				'edit_item' => __('Edit Location'),
+				'new_item' => __('New Location'),
+				'all_items' => __('All Locations'),
+				'view_item' => __('View Location'),
+				'search_items' => __('Search Locations'),
+				'not_found' => __('No locations found'),
+				'not_found_in_trash' => __('No locations found in Trash'),
+				'menu_name' => 'Locations',
 			),
 		'public' => true,
 		'has_archive' => false,

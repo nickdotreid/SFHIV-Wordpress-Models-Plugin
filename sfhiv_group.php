@@ -6,7 +6,17 @@ function sfhiv_create_group_type() {
 		array(
 			'labels' => array(
 				'name' => __( 'Groups' ),
-				'singular_name' => __( 'Group' )
+				'singular_name' => __( 'Group' ),
+				'add_new' => __('Add New','group'),
+				'add_new_item' => __('Add New Group'),
+				'edit_item' => __('Edit Group'),
+				'new_item' => __('New Group'),
+				'all_items' => __('All Groups'),
+				'view_item' => __('View Group'),
+				'search_items' => __('Search Groups'),
+				'not_found' => __('No groups found'),
+				'not_found_in_trash' => __('No groups found in Trash'),
+				'menu_name' => 'Groups',
 			),
 		'public' => true,
 		'show_ui' => true,

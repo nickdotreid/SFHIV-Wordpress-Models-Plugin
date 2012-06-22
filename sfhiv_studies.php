@@ -6,7 +6,17 @@ function sfhiv_add_studies_type(){
 		array(
 			'labels' => array(
 				'name' => __( 'Studies' ),
-				'singular_name' => __( 'Study' )
+				'singular_name' => __( 'Study' ),
+				'add_new' => __('Add New','study'),
+				'add_new_item' => __('Add New Study'),
+				'edit_item' => __('Edit Study'),
+				'new_item' => __('New Study'),
+				'all_items' => __('All Studies'),
+				'view_item' => __('View Study'),
+				'search_items' => __('Search Studies'),
+				'not_found' => __('No studies found'),
+				'not_found_in_trash' => __('No studies found in Trash'),
+				'menu_name' => 'Studies',
 			),
 		'public' => true,
 		'has_archive' => true,

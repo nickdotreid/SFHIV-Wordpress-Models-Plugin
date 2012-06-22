@@ -6,7 +6,17 @@ function sfhiv_add_services_type(){
 		array(
 			'labels' => array(
 				'name' => __( 'Services' ),
-				'singular_name' => __( 'Service' )
+				'singular_name' => __( 'Service' ),
+				'add_new' => __('Add New','service'),
+				'add_new_item' => __('Add New Service'),
+				'edit_item' => __('Edit Service'),
+				'new_item' => __('New Service'),
+				'all_items' => __('All Services'),
+				'view_item' => __('View Service'),
+				'search_items' => __('Search Services'),
+				'not_found' => __('No services found'),
+				'not_found_in_trash' => __('No services found in Trash'),
+				'menu_name' => 'Services',
 			),
 		'public' => true,
 		'has_archive' => true,
