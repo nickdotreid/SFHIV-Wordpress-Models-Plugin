@@ -29,7 +29,6 @@ function sfhiv_add_services_type(){
 		'register_meta_box_cb' => 'sfhiv_add_services_meta_boxes',
 		)
 	);
-	add_post_type_support( 'sfhiv_service', 'excerpt' );
 }
 
 include_once("sfhiv_service_hours.php");
