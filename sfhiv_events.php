@@ -26,7 +26,7 @@ function sfhiv_add_events_type(){
 			'feeds' => false,
 		),
 		'capability_type' => 'page',
-		'supports' => array('title','editor','excerpt'),
+		'supports' => array('editor','excerpt'),
 		'taxonomies' => array(
 			'sfhiv_service_category',
 			'sfhiv_group_category',
