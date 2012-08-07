@@ -62,6 +62,7 @@ function sfhiv_website_link_get_link($post_ID=false){
 	);
 }
 
+add_filter('post_link','sfhiv_website_link_filter',2,2);
 add_filter('post_type_link','sfhiv_website_link_filter',2,2);
 add_filter('page_link','sfhiv_website_link_filter',2,2);
 function sfhiv_website_link_filter($link,$post_id){
