@@ -25,6 +25,12 @@ License:
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
   
 */
+add_action('init','sfhiv_initialize_cmb_meta_boxes',9999);
+function sfhiv_initialize_cmb_meta_boxes(){
+	if(!class_exists( 'cmb_Meta_Box' )){
+		require_once('lib/cmb_meta_boxes/init.php');
+	}
+}
 
 require_once('page.php');
 
