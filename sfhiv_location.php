@@ -244,7 +244,9 @@ function sfhiv_location_post_relation_save($post_ID){
 	sfhiv_location_relation_save($post_ID,$_POST['sfhiv_location']);
 }
 function sfhiv_location_relation_save($post_ID,$location_ID){
-	p2p_type( 'related_location' )->disconnect_all($post_ID);
+	p2p_delete_connections('related_location',array(
+		"from" => $post_ID,
+	));
 	p2p_create_connection( 'related_location', array(
 		'from' => $post_ID,
 		'to' => $location_ID,
