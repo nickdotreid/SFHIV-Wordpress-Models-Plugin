@@ -37,43 +37,29 @@ function sfhiv_add_events_type(){
 	);
 }
 
-function sfhiv_add_events_meta_boxes(){
-	wp_enqueue_script('sfhiv_event_js', plugins_url('assets/js/admin-event.js',__FILE__),array('jquery'));
-	add_meta_box( 'event_time', 'When', 'sfhiv_event_time_box', 'sfhiv_event', 'side', 'high' );
-	sfhiv_location_add_choose_location_meta_box('sfhiv_event');
-}
-
-function sfhiv_event_time_box($post){
-	$start_time = get_post_meta($post->ID, 'sfhiv_event_start',true);
-	$end_time = get_post_meta($post->ID, 'sfhiv_event_end',true);
-	?>
-	<p><label>Start Day:<input id="sfhiv_event_start_date" class="sfhiv-date" type="text" name="sfhiv_event[start][date]" value="<?=date('Y-m-d',$start_time);?>" /></label></p>
-	<p><label>Start Time:<input id="sfhiv_event_start_time" class="sfhiv-time" type="text" name="sfhiv_event[start][time]" value="<?=date('g:i a',$start_time);?>" /></label></p>
-	<p><label>End Day:<input id="sfhiv_event_end_date" class="sfhiv-date" type="text" name="sfhiv_event[end][date]" value="<?=date('Y-m-d',$end_time);?>" /></label></p>
-	<p><label>End Time:<input id="sfhiv_event_end_time" class="sfhiv-time" type="text" name="sfhiv_event[end][time]" value="<?=date('g:i a',$end_time);?>" /></label></p>
-	<?
-}
-
-add_action( 'save_post', 'sfhiv_event_time_save' );
-function sfhiv_event_time_save($post_ID){
-	if(get_post_type($post_ID) != 'sfhiv_event') return;
-	$start_time = sfhiv_event_save_time($post_ID,'sfhiv_event_start',$_POST['sfhiv_event']['start']);
-	$end_time = sfhiv_event_save_time($post_ID,'sfhiv_event_end',$_POST['sfhiv_event']['end']);
-
-	if($start_time && $end_time && $end_time<$start_time){
-		update_post_meta($post_ID, 'sfhiv_event_end', $start_time);
-	}
-	if($start_time && !$end_time){
-		update_post_meta($post_ID, 'sfhiv_event_end', $start_time);
-	}
-}
-
-function sfhiv_event_save_time($post_ID,$key,$postdata){
-	if(!isset($postdata['date']) || $postdata['date']=="" || !isset($postdata['time']) || $postdata['time']=="") return false;
-	$time = strtotime($postdata['date'].' '.$postdata['time']);
-	if(!$time)	return false;
-	update_post_meta($post_ID, $key, $time);
-	return $time;
+add_filter( 'cmb_meta_boxes', 'sfhiv_event_add_time_duration_fields', 20 );
+function sfhiv_event_add_time_duration_fields( $metaboxes ){
+	$meta_boxes[] = array(
+		'id'         => 'sfhiv_event_metabox',
+		'title'      => 'Event Time and Duration',
+		'pages'      => array( 'sfhiv_event', ),
+		'context'    => 'side',
+		'priority'   => 'high',
+		'show_names' => true, // Show field names on the left
+		'fields' => array(
+			array(
+				'name' => 'Start Time',
+				'id'   => 'sfhiv_event_start',
+				'type' => 'text_datetime_timestamp',
+			),
+			array(
+				'name' => 'End Time',
+				'id'   => 'sfhiv_event_end',
+				'type' => 'text_datetime_timestamp',
+			),
+		)
+	);
+	return $meta_boxes;
 }
 
 add_action('init','sfhiv_add_event_category');
