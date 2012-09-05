@@ -83,22 +83,43 @@ function sfhiv_add_event_category(){
   ));
 }
 
+function sfhiv_event_query_is_upcoming($query){
+	if($query->query_vars['tax_query']){
+		foreach($query->query_vars['tax_query'] as $que){
+			if(sfhiv_event_tax_query_is_upcoming($que)){
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+function sfhiv_event_tax_query_remove_upcoming($tax_query){
+	foreach($query->query_vars['tax_query'] as $que){
+		if(!sfhiv_event_tax_query_is_upcoming($que)){
+			$new_tax_query[] = $que;
+		}
+	}
+	$new_tax_query = array( "relation" => $tax_query['relation'] );
+	return $new_tax_query;
+}
+
+function sfhiv_event_tax_query_is_upcoming($que){
+	if($que['taxonomy'] == 'sfhiv_event_category'){
+		if($que['field'] == 'slug' && $que['terms'] == 'upcoming'){
+			return true;
+		}
+	}
+	return false;
+}
+
 add_action('parse_query','sfhiv_event_query_set_vars');
 function sfhiv_event_query_set_vars($query){
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
 	if(isset($query->query_vars['sfhiv_event_selection'])) return;
-	$query->set("sfhiv_event_selection","future");
-	if(isset($_GET['sfhiv_event_time'])){
-		switch($_GET['sfhiv_event_time']){
-			case "future":
-				$query->set("sfhiv_event_selection","future");
-				break;
-			case "past":
-				$query->set("sfhiv_event_selection","past");
-			break;
-			default:
-				$query->set("sfhiv_event_selection","all");
-		}
+	if(sfhiv_event_query_is_upcoming($query)){
+		$query->set("sfhiv_event_selection","future");
+		$query->set('tax_query',sfhiv_event_tax_query_remove_upcoming($query->query_vars['tax_query']));
 	}
 }
 
@@ -133,37 +154,13 @@ function sfhiv_event_query_update($query){
 		        'value' => time(),
 		        'compare' => '>'
 		    ) ));
-			if(sfhiv_event_test_query($query)){
-				$query->set("sfhiv_event_selection","future");
-				break;
-			}
-		case "past":
-			$query->set( 'meta_query', array(
-				"relation" => "AND",
-				array(
-		        'key' => 'sfhiv_event_start',
-		        'value' => time(),
-		        'compare' => '<'
-		    ) ));
-			if(sfhiv_event_test_query($query)){
-				$query->set("sfhiv_event_selection","past");
-				break;
-			}
-			
+			break;			
 		default:
 			$query->set( 'meta_query', array() );
 	}
 	sfhiv_event_order_query( &$query );
 	add_action( 'pre_get_posts', 'sfhiv_event_query_update', 7 );
 	add_action('parse_query','sfhiv_event_query_set_vars');
-}
-
-function sfhiv_event_test_query($query){
-	$test_query = new WP_Query($query->query_vars);
-	if($test_query->post_count>0){
-		return true;
-	}
-	return false;
 }
 
 ?>
