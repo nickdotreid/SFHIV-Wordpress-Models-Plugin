@@ -38,7 +38,7 @@ function sfhiv_add_events_type(){
 }
 
 add_filter( 'cmb_meta_boxes', 'sfhiv_event_add_unique_page_metabox', 21 );
-function sfhiv_event_add_unique_page_metabox( $metaboxes ){
+function sfhiv_event_add_unique_page_metabox( $meta_boxes ){
 	$meta_boxes[] = array(
 		'id'         => 'sfhiv_event_unique_page',
 		'title'      => 'Unique Page',
@@ -74,14 +74,16 @@ function sfhiv_event_link_filter($link,$post_id){
 		if($groups->post_count > 0){
 			$group = $groups->posts[0];
 			$link = get_permalink($group->ID);
-			return $link."#post-".get_the_ID();
+			return $link."#sfhiv_event-".get_the_ID();
 		};
+
+		return "FOO";
 	}
 	return $link;
 }
 
 add_filter( 'cmb_meta_boxes', 'sfhiv_event_add_time_duration_fields', 20 );
-function sfhiv_event_add_time_duration_fields( $metaboxes ){
+function sfhiv_event_add_time_duration_fields( $meta_boxes ){
 	$meta_boxes[] = array(
 		'id'         => 'sfhiv_event_metabox',
 		'title'      => 'Event Time and Duration',
