@@ -37,6 +37,49 @@ function sfhiv_add_events_type(){
 	);
 }
 
+add_filter( 'cmb_meta_boxes', 'sfhiv_event_add_unique_page_metabox', 21 );
+function sfhiv_event_add_unique_page_metabox( $metaboxes ){
+	$meta_boxes[] = array(
+		'id'         => 'sfhiv_event_unique_page',
+		'title'      => 'Unique Page',
+		'pages'      => array( 'sfhiv_event', ),
+		'context'    => 'side',
+		'priority'   => 'high',
+		'show_names' => true, // Show field names on the left
+		'fields' => array(
+			array(
+				'name' => 'Unique page',
+				'desc' => 'Create unique page for meeting',
+				'id'   => 'sfhiv_event_unique_page_checkbox',
+				'type' => 'checkbox',
+			),
+		)
+	);
+	return $meta_boxes;
+}
+
+add_filter('post_type_link','sfhiv_event_link_filter',2,2);
+function sfhiv_event_link_filter($link,$post_id){
+	if(get_post_type($post_id) != 'sfhiv_event'){
+		return $link;
+	}
+	$unique = get_post_meta($post_id,'sfhiv_event_unique_page_checkbox',true);
+	if(!$unique){
+		
+		$groups = new WP_Query( array(
+			'connected_type' => 'group_events',
+			'post_type' => 'sfhiv_group',
+			'connected_items' => get_the_ID(),
+		));
+		if($groups->post_count > 0){
+			$group = $groups->posts[0];
+			$link = get_permalink($group->ID);
+			return $link."#post-".get_the_ID();
+		};
+	}
+	return $link;
+}
+
 add_filter( 'cmb_meta_boxes', 'sfhiv_event_add_time_duration_fields', 20 );
 function sfhiv_event_add_time_duration_fields( $metaboxes ){
 	$meta_boxes[] = array(
@@ -85,9 +128,11 @@ function sfhiv_add_event_category(){
 
 function sfhiv_event_query_is_upcoming($query){
 	if($query->query_vars['tax_query']){
-		foreach($query->query_vars['tax_query'] as $que){
-			if(sfhiv_event_tax_query_is_upcoming($que)){
-				return true;
+		foreach($query->query_vars['tax_query'] as $num => $que){
+			if($num != 'relation'){
+				if(sfhiv_event_tax_query_is_upcoming($que)){
+					return true;
+				}				
 			}
 		}
 	}
@@ -95,7 +140,7 @@ function sfhiv_event_query_is_upcoming($query){
 }
 
 function sfhiv_event_tax_query_remove_upcoming($tax_query){
-	foreach($query->query_vars['tax_query'] as $que){
+	foreach($tax_query as $que){
 		if(!sfhiv_event_tax_query_is_upcoming($que)){
 			$new_tax_query[] = $que;
 		}
