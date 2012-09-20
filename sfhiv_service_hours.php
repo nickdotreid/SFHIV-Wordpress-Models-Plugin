@@ -76,8 +76,9 @@ function sfhiv_service_time_box($post){
 		$match = false;
 		$start = sfhiv_service_get_start_time($hour);
 		$end = sfhiv_service_get_end_time($hour);
+		$location = sfhiv_service_get_location_id($hour);
 		foreach($collected_hours as $index => $time){
-			if($time['start'] == $start && $time['end'] == $end){
+			if($time['start'] == $start && $time['end'] == $end && $location == $time['location']){
 				$match = true;
 				$collected_hours[$index]['days'] = array_merge($collected_hours[$index]['days'],sfhiv_service_get_service_days($hour));
 			}
@@ -87,7 +88,7 @@ function sfhiv_service_time_box($post){
 				'days' => sfhiv_service_get_service_days($hour),
 				'start' => $start,
 				'end' => $end,
-				'locations' => array(sfhiv_service_get_location_id($hour)),
+				'location' => $location,
 			));
 		}
 	}
@@ -134,7 +135,7 @@ function sfhiv_service_draw_service_hour_form($data=array()){
 	echo '<div class="service_hour">';
 	sfhiv_draw_services_hours_op_meta($data['days'],'hours[position]');
 	sfhiv_draw_service_hours_time_meta($data['start'], $data['end'],'hours[position]');
-	sfhiv_location_location_list_draw($data['locations'],array(
+	sfhiv_location_location_list_draw(array($data['location']),array(
 		'field_name' => 'hours[position][sfhiv_location]',
 		));
 	echo '</div>';
