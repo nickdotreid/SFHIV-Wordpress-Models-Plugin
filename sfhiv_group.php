@@ -89,12 +89,6 @@ function sfhiv_group_connection_types() {
 	));
 
 	p2p_register_connection_type( array(
-		'name' => 'group_services',
-		'from' => 'sfhiv_group',
-		'to' => 'sfhiv_service',
-	));
-
-	p2p_register_connection_type( array(
 		'name' => 'group_members',
 		'from' => 'sfhiv_group',
 		'to' => 'user',

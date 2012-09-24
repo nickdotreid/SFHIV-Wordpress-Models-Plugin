@@ -235,6 +235,9 @@ function sfhiv_create_or_update_service_hours($post_ID=false,$post_data,$parent_
 	}
 	if(isset($post_data['day_of_week'])){
 		 wp_set_object_terms( $post_ID, $post_data['day_of_week'], 'sfhiv_day_of_week_taxonomy', false );
+		if($parent_ID){
+			wp_set_object_terms( $parent_ID, $post_data['day_of_week'], 'sfhiv_day_of_week_taxonomy', true );
+		}
 	}
 }
 

@@ -31,6 +31,44 @@ function sfhiv_add_services_type(){
 	);
 }
 
+add_action('init','sfhiv_add_service_provider_type');
+function sfhiv_add_service_provider_type(){
+	register_post_type( 'sfhiv_provider',
+		array(
+			'labels' => array(
+				'name' => __( 'Service Providers' ),
+				'singular_name' => __( 'Service Provider' ),
+				'add_new' => __('Add New','Service Provider'),
+				'add_new_item' => __('Add New Service Provider'),
+				'edit_item' => __('Edit Service Provider'),
+				'new_item' => __('New Service Provider'),
+				'all_items' => __('All Service Providers'),
+				'view_item' => __('View Service Provider'),
+				'search_items' => __('Search Service Providers'),
+				'not_found' => __('No service providers found'),
+				'not_found_in_trash' => __('No service providers found in Trash'),
+				'menu_name' => 'Service Providers',
+			),
+			'supports' => array('title','thumbnail'),
+			'public' => false,
+			'show_ui' => true,
+			'show_in_menu' => 'edit.php?post_type=sfhiv_service',
+			'menu_position' => 100,
+			'taxonomies' => array(),
+		)
+	);
+}
+
+add_action( 'wp_loaded', 'sfhiv_service_to_provider_connection' );
+function sfhiv_service_to_provider_connection() {
+	p2p_register_connection_type( array(
+		'name' => 'provider_services',
+		'from' => 'sfhiv_provider',
+		'to' => 'sfhiv_service',
+		'title' => array( 'from' => __( 'Services from Provider', 'sfhiv' ), 'to' => __( 'Provider for Service', 'sfhiv' ) ),
+	));
+}
+
 include_once("sfhiv_service_hours.php");
 include_once("sfhiv_services_time_taxonomy.php");
 include_once("sfhiv_services_day_taxonomy.php");
