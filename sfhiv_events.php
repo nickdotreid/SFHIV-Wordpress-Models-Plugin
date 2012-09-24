@@ -66,15 +66,14 @@ function sfhiv_event_get_groups($query){
 }
 
 add_filter('post_type_link','sfhiv_event_link_filter',2,2);
-function sfhiv_event_link_filter($link,$post_id){
-	if(is_admin() || get_post_type($post_id) != 'sfhiv_event') return $link;
-	$unique = get_post_meta($post_id,'sfhiv_event_unique_page_checkbox',true);
+function sfhiv_event_link_filter($link,$post){
+	if(is_admin() || get_post_type($post->ID) != 'sfhiv_event') return $link;
+	$unique = get_post_meta($post->ID,'sfhiv_event_unique_page_checkbox',true);
 	if(!$unique){
-		$event = get_post($post_id);
-		if(count($event->groups)){
-			$group = $event->groups[0];
+		if(count($post->groups)){
+			$group = $post->groups[0];
 			$link = get_permalink($group->ID);
-			return $link."#sfhiv_event-".get_the_ID();
+			return $link."#sfhiv_event-".$post->ID;
 		};
 	}
 	return $link;
