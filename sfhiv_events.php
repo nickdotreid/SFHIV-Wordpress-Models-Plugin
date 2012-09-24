@@ -65,7 +65,6 @@ function sfhiv_event_link_filter($link,$post_id){
 	}
 	$unique = get_post_meta($post_id,'sfhiv_event_unique_page_checkbox',true);
 	if(!$unique){
-		
 		$groups = new WP_Query( array(
 			'connected_type' => 'group_events',
 			'post_type' => 'sfhiv_group',
@@ -76,8 +75,6 @@ function sfhiv_event_link_filter($link,$post_id){
 			$link = get_permalink($group->ID);
 			return $link."#sfhiv_event-".get_the_ID();
 		};
-
-		return "FOO";
 	}
 	return $link;
 }
