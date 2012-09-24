@@ -1,6 +1,6 @@
 <?php
 
-add_action('save_post','sfhiv_group_event_inherit_status');
+//add_action('save_post','sfhiv_group_event_inherit_status');
 function sfhiv_group_event_inherit_status($post_ID){
 	if(get_post_type($post_ID) == 'sfhiv_group'){
 		$events_query = sfhiv_group_get_events($post_ID);

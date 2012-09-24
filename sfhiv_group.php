@@ -76,7 +76,7 @@ function sfhiv_group_connection_types() {
 	// Make sure the Posts 2 Posts plugin is active.
 	if ( !function_exists( 'p2p_register_connection_type' ) )
 		return;
-		
+	
 	p2p_register_connection_type( array(
 		'name' => 'group_events',
 		'from' => 'sfhiv_group',
@@ -87,7 +87,7 @@ function sfhiv_group_connection_types() {
 				'context' => 'advanced'
 		),
 	));
-
+	
 	p2p_register_connection_type( array(
 		'name' => 'group_members',
 		'from' => 'sfhiv_group',
