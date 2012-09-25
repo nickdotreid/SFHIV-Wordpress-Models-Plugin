@@ -24,6 +24,20 @@ function sfhiv_add_service_hours_type(){
 	) );
 }
 
+add_filter( 'the_posts', 'sfhiv_service_load_service_hours', 10, 2);
+function sfhiv_service_load_service_hours($posts,$query){
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service' ) return $posts;
+	p2p_type( 'service_time' )->each_connected( $query, array(), 'times' );
+	return $posts;
+}
+
+add_filter( 'the_posts', 'sfhiv_service_hours_load_related_locations', 10, 2);
+function sfhiv_service_hours_load_related_locations($posts, $query){
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return $posts;
+	p2p_type( 'related_location' )->each_connected( $query, array(), 'location' );
+	return $posts;
+}
+
 add_action( 'pre_get_posts', 'sfhiv_service_hour_sort_order', 5 );
 function sfhiv_service_hour_sort_order( $query ) {
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return;
