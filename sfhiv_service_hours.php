@@ -27,7 +27,7 @@ function sfhiv_add_service_hours_type(){
 add_filter( 'the_posts', 'sfhiv_service_load_service_hours', 10, 2);
 function sfhiv_service_load_service_hours($posts,$query){
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service' ) return $posts;
-	p2p_type( 'service_time' )->each_connected( $query, array(), 'times' );
+	p2p_type( 'service_time' )->each_connected( $query, array('post_type'=>'sfhiv_service_hour'), 'times' );
 	return $posts;
 }
 
