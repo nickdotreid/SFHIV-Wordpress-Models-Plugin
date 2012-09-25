@@ -34,8 +34,51 @@ function sfhiv_service_load_service_hours($posts,$query){
 add_filter( 'the_posts', 'sfhiv_service_hours_load_related_locations', 10, 2);
 function sfhiv_service_hours_load_related_locations($posts, $query){
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return $posts;
-	p2p_type( 'related_location' )->each_connected( $query, array(), 'location' );
+	p2p_type( 'related_location' )->each_connected( $query, array(), 'locations' );
 	return $posts;
+}
+
+function sfhiv_service_hours_sort_by_location($times){
+	$locations = array();
+	foreach($times as $time){
+		foreach($time->locations as $tiloc){
+			$found = false;
+			foreach($locations as $loc){
+				if($tiloc->ID == $loc->ID){
+					$loc->times[] = $time;
+					$found = true;
+				}
+			}
+			if(!$found){
+				$tiloc->times = array($time);
+				$locations[] = $tiloc;
+			}
+		}
+		$time->locations = array();
+	}
+	return $locations;
+}
+
+function sfhiv_service_hours_sort_by_start_end($hours){
+	$times = array();
+	foreach($hours as $time){
+		$found = false;
+		foreach($times as $t){
+			if($t['start'] == $time->start && $t['end'] == $time->end){
+				$found = true;
+				$t['times'][] = $time;
+			}
+		}
+		if(!$found){
+			$t = array(
+				"start" => $time->start,
+				"end" => $time->end,
+				"times" => array($time),
+			);
+			$times[] = $t;
+		}
+	}
+	return $times;
 }
 
 add_filter( 'the_posts', 'sfhiv_service_hours_load_time', 10, 2);
