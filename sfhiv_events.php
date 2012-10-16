@@ -58,11 +58,11 @@ function sfhiv_event_add_unique_page_metabox( $meta_boxes ){
 	return $meta_boxes;
 }
 
-add_action( 'pre_get_posts', 'sfhiv_event_get_groups', 7 );
-function sfhiv_event_get_groups($query){
-	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
-	p2p_type( 'group_events' )->each_connected( $query, array(), 'groups' );
-	return $query;
+add_action( 'the_posts', 'sfhiv_event_get_groups', 7, 2 );
+function sfhiv_event_get_groups($posts,$query){
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return $posts;
+	p2p_type( 'group_events' )->each_connected( $query, array('post_type'=>'sfhiv_group'), 'groups' );
+	return $query->posts;
 }
 
 add_filter('post_type_link','sfhiv_event_link_filter',2,2);
@@ -70,8 +70,14 @@ function sfhiv_event_link_filter($link,$post){
 	if(is_admin() || get_post_type($post->ID) != 'sfhiv_event') return $link;
 	$unique = get_post_meta($post->ID,'sfhiv_event_unique_page_checkbox',true);
 	if(!$unique){
-		if(count($post->groups)){
-			$group = $post->groups[0];
+		$groups = new WP_Query( array(
+			'connected_type' => 'group_events',
+			'connected_items' => $post->ID,
+			'nopaging' => true,
+			'post_type' => 'sfhiv_group',
+		));
+		if(count($groups->posts) > 0){
+			$group = $groups->posts[0];
 			$link = get_permalink($group->ID);
 			return $link."#sfhiv_event-".$post->ID;
 		};
