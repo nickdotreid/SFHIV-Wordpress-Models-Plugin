@@ -38,6 +38,18 @@ function sfhiv_service_hours_load_related_locations($posts, $query){
 	return $posts;
 }
 
+add_filter( 'the_posts', 'sfhiv_service_hours_load_days', 10, 2);
+function sfhiv_service_hours_load_days($posts, $query){
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service_hour' ) return $posts;
+	foreach($posts as $post){
+		$days = wp_get_object_terms( $post->ID, "sfhiv_day_of_week_taxonomy", array(
+			"fields" => "slugs",
+		));
+		$post->days = $days;
+	}
+	return $posts;
+}
+
 function sfhiv_service_hours_sort_by_location($times){
 	$locations = array();
 	foreach($times as $time){
@@ -79,6 +91,31 @@ function sfhiv_service_hours_sort_by_start_end($hours){
 		}
 	}
 	return $times;
+}
+
+function sfhiv_service_hours_sort_by_day($hours){
+	$days = array();
+	foreach($hours as $time){
+		foreach($time->days as $day){
+			$found = false;
+			foreach($days as $day_obj){
+				if($day_obj['day'] == $day){
+					$day_obj['times'][] = $time;
+					$found = true;
+				}
+			}
+			if(!$found){
+				$d = array(
+					"day" => $day,
+					"times" => array($time),
+				);
+				$days[] = $d;
+			}
+		}
+	}
+	// sort each day by taxonomy day order
+	// sort each days hours by start time
+	return $days;
 }
 
 add_filter( 'the_posts', 'sfhiv_service_hours_load_time', 10, 2);
