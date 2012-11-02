@@ -66,6 +66,7 @@ function sfhiv_service_to_provider_connection() {
 		'from' => 'sfhiv_provider',
 		'to' => 'sfhiv_service',
 		'title' => array( 'from' => __( 'Services from Provider', 'sfhiv' ), 'to' => __( 'Provider for Service', 'sfhiv' ) ),
+		'admin_column' => 'to',
 	));
 }
 
