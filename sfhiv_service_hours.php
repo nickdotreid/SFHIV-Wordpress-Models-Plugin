@@ -50,6 +50,16 @@ function sfhiv_service_hours_load_days($posts, $query){
 	return $posts;
 }
 
+function sfhiv_service_hour_get_service($service_hour){
+	$services = new WP_Query( array(
+		'post_type' => 'sfhiv_service',
+		'connected_type' => 'service_time',
+		'connected_items' => $service_hour->ID,
+	));
+	if($services->post_count < 1) return false;
+	return $services->posts[0];
+}
+
 function sfhiv_service_hours_sort_by_location($times){
 	$locations = array();
 	foreach($times as $time){
