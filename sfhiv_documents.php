@@ -37,37 +37,6 @@ function sfhiv_add_documents_type(){
 	);
 }
 
-function sfhiv_document_metaboxes(){
-//	wp_enqueue_script('sfhiv_event_js', get_bloginfo('stylesheet_directory') . '/models/assets/js/admin-event.js',array('jquery'));
-	add_meta_box( 'document', 'Publication Date', 'sfhiv_document_pub_box', 'sfhiv_document', 'side', 'high' );
-}
-
-function sfhiv_document_get_pub_date($ID=false){
-	if(!$ID){
-		$ID = get_the_ID();
-	}
-	return get_post_meta($ID, 'sfhiv_document_pub_date',true);
-}
-
-function sfhiv_document_pub_box($post){
-	$pub_date = sfhiv_document_get_pub_date($post->ID);
-	$value = "";
-	if($pub_date){
-		$value = date('F Y',$pub_date);
-	}
-	echo '<label for="sfhiv_document_pub_date">Publication Date</label>';
-	echo '<input type="text" id="sfhiv_document_pub_date" name="sfhiv_document_pub_date" value="'.$value.'" />';
-}
-
-add_action( 'save_post', 'sfhiv_document_pub_date_save' );
-function sfhiv_document_pub_date_save($post_ID){
-	delete_post_meta($post_ID,'sfhiv_document_pub_date');
-	if(!isset($_POST['sfhiv_document_pub_date'])) return;
-	$date = strtotime($_POST['sfhiv_document_pub_date']);
-	add_post_meta($post_ID,'sfhiv_document_pub_date',$date);
-}
-
-
 add_action('init','sfhiv_add_document_category');
 function sfhiv_add_document_category(){
 	$labels = array(
@@ -119,28 +88,18 @@ function sfhiv_document_query_top_level_only( $query ) {
 }
 
 
-add_action( 'pre_get_posts', 'sfhiv_document_query_sort', 10 );
-function sfhiv_document_query_sort( $query ) {
-    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_document' ) return;
+add_action( 'pre_get_posts', 'sfhiv_document_query_sort_by_date', 10 );
+function sfhiv_document_query_sort_by_date($query){
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_document' ) return;
 	
-	$query->query_vars['meta_key'] = 'sfhiv_document_pub_date';
-	$query->query_vars['orderby'] = 'meta_value,ID';
+	$query->query_vars['orderby'] = 'date,ID';
 	$query->query_vars['order'] = 'DESC';
-	if(!sfhiv_document_test_query($query->query_vars)){
-		$query->query_vars['meta_key'] = '';
-		$query->query_vars['orderby'] = 'title';
-		$query->query_vars['order'] = 'ASC';
-	}
 }
 
-function sfhiv_document_test_query($args){
-	remove_action('pre_get_posts', 'sfhiv_document_query_sort', 10);
-	$query = new WP_Query($args);
-	add_action( 'pre_get_posts', 'sfhiv_document_query_sort', 10 );
-	if($query->post_count > 0){
-		return true;
-	}
-	return false;
+remove_action( 'future_sfhiv_document', '_future_post_hook', 5, 2 );
+add_action( 'future_sfhiv_document', 'sfhiv_document_future_post_hook', 5, 2);
+function sfhiv_document_future_post_hook( $deprecated = '', $post){
+	wp_publish_post( $post->ID );
 }
 
 function sfhiv_document_get_studies($ID=false){
