@@ -79,7 +79,7 @@ function sfhiv_event_link_filter($link,$post){
 		if(count($groups->posts) > 0){
 			$group = $groups->posts[0];
 			$link = get_permalink($group->ID);
-			return $link."#sfhiv_event-".$post->ID;
+			return $link."#post-".$post->ID;
 		};
 	}
 	return $link;
