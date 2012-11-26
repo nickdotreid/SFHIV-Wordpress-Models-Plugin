@@ -101,9 +101,10 @@ function sfhiv_event_add_time_duration_fields( $meta_boxes ){
 				'type' => 'text_datetime_timestamp',
 			),
 			array(
-				'name' => 'End Time',
-				'id'   => 'sfhiv_event_end',
-				'type' => 'text_datetime_timestamp',
+				'name' => 'Duration',
+				'desc' => 'Enter the number of hours the event lasts. Enter amounts smaller than an hour with a decimal.',
+				'id'   => 'sfhiv_event_duration',
+				'type' => 'text_small',
 			),
 			array(
 				'name'    => 'Date Status',
@@ -120,6 +121,30 @@ function sfhiv_event_add_time_duration_fields( $meta_boxes ){
 		)
 	);
 	return $meta_boxes;
+}
+function sfhiv_event_get_start_time($post_ID){
+	return get_post_meta($post_ID,'sfhiv_event_start',true);
+}
+
+function sfhiv_event_get_end_time($post_ID){
+	$duration = get_post_meta($post_ID,'sfhiv_event_duration',true);
+	if($duration){
+		$seconds = $duration * 60 * 60;
+		$time = get_post_meta($post_ID,'sfhiv_event_start',true);
+		return $time + $seconds;
+	}
+	# This is depreciated for existing data
+	return get_post_meta($post_ID,'sfhiv_event_end',true);
+}
+
+function sfhiv_event_get_duration($post_ID){
+	$duration = get_post_meta($post_ID,'sfhiv_event_duration',true);
+	if($duration){
+		return $duration;
+	}
+	$start = get_post_meta($post_ID,'sfhiv_event_start',true);
+	$end = get_post_meta($post_ID,'sfhiv_event_end',true);
+	return $end - $start;
 }
 
 add_action('init','sfhiv_add_event_category');
