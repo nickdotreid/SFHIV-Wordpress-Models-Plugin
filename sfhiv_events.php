@@ -105,6 +105,18 @@ function sfhiv_event_add_time_duration_fields( $meta_boxes ){
 				'id'   => 'sfhiv_event_end',
 				'type' => 'text_datetime_timestamp',
 			),
+			array(
+				'name'    => 'Date Status',
+				'desc'    => 'How confirmed is this date',
+				'id'      => 'sfhiv_event_date_status',
+				'type'    => 'radio',
+				'options' => array(
+					array( 'name' => 'Confirmed', 'value' => 'confirmed', ),
+					array( 'name' => 'Day Announced', 'value' => 'day', ),
+					array( 'name' => 'Month Announced', 'value' => 'month', ),
+					array( 'name' => 'To Be Announced', 'value' => 'tba', ),
+				),
+			),
 		)
 	);
 	return $meta_boxes;
