@@ -215,14 +215,7 @@ function sfhiv_event_order_query( $query ) {
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
     $query->set( 'meta_key', 'sfhiv_event_start' );
 	$query->set( 'orderby', 'meta_value_num' );
-	switch($query->query_vars['sfhiv_event_selection']){
-		case "future":
-			$query->set( 'order', 'ASC' );
-			break;
-		default:
-			$query->set( 'order', 'DESC' );
-			break;
-	}
+	$query->set( 'order', 'ASC' );
 }
 
 add_action( 'pre_get_posts', 'sfhiv_event_query_update', 7 );
