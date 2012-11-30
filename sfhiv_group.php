@@ -71,48 +71,6 @@ function sfhiv_create_group_categories() {
   ));
 }
 
-add_action( 'wp_loaded', 'sfhiv_group_connection_types' );
-function sfhiv_group_connection_types() {
-	// Make sure the Posts 2 Posts plugin is active.
-	if ( !function_exists( 'p2p_register_connection_type' ) )
-		return;
-	
-	p2p_register_connection_type( array(
-		'name' => 'group_events',
-		'from' => 'sfhiv_group',
-		'to' => 'sfhiv_event',
-		'title' => array( 'from' => __( 'Events in Group', 'sfhiv' ), 'to' => __( 'Group in Events', 'sfhiv' ) ),
-		'admin_box' => array(
-				'show' => 'any',
-				'context' => 'advanced'
-		),
-	));
-	
-	p2p_register_connection_type( array(
-		'name' => 'group_members',
-		'from' => 'sfhiv_group',
-		'to' => 'user',
-		'title' => array( 'from' => __( 'Members in Group', 'sfhiv' ), 'to' => __( 'Groups for Member', 'sfhiv' ) ),
-		'fields' => array(
-				'hide' => array(
-					'title' => 'Hide Title',
-					'type' => 'checkbox',
-				),
-				'title' => 'Title',
-				'weight' => 'Weight',
-				'group' => 'Grouping',
-				'show_contact_info' => array(
-					'title' => 'Contactable',
-					'type' => 'checkbox',
-				),
-			),
-		'admin_box' => array(
-				'show' => 'any',
-				'context' => 'advanced'
-		),
-	));
-}
-
 include_once('sfhiv_group_member.php');
 include_once('sfhiv_group_event.php');
 

@@ -1,5 +1,23 @@
 <?php
 
+add_action( 'wp_loaded', 'sfhiv_group_event_connection' );
+function sfhiv_group_event_connection() {
+	// Make sure the Posts 2 Posts plugin is active.
+	if ( !function_exists( 'p2p_register_connection_type' ) )
+		return;
+	
+	p2p_register_connection_type( array(
+		'name' => 'group_events',
+		'from' => 'sfhiv_group',
+		'to' => 'sfhiv_event',
+		'title' => array( 'from' => __( 'Events in Group', 'sfhiv' ), 'to' => __( 'Group in Events', 'sfhiv' ) ),
+		'admin_box' => array(
+				'show' => 'any',
+				'context' => 'advanced'
+		),
+	));
+}
+
 //add_action('save_post','sfhiv_group_event_inherit_status');
 function sfhiv_group_event_inherit_status($post_ID){
 	if(get_post_type($post_ID) == 'sfhiv_group'){

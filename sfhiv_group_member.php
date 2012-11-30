@@ -1,5 +1,33 @@
 <?php
 
+add_action( 'wp_loaded', 'sfhiv_group_connection_to_users' );
+function sfhiv_group_connection_to_users() {
+	// Make sure the Posts 2 Posts plugin is active.
+	if ( !function_exists( 'p2p_register_connection_type' ) )
+		return;
+	
+	p2p_register_connection_type( array(
+		'name' => 'group_members',
+		'from' => 'sfhiv_group',
+		'to' => 'user',
+		'title' => array( 'from' => __( 'Members in Group', 'sfhiv' ), 'to' => __( 'Groups for Member', 'sfhiv' ) ),
+		'fields' => array(
+				'hide' => array(
+					'title' => 'Hide Title',
+					'type' => 'checkbox',
+				),
+				'title' => 'Title',
+				'weight' => 'Weight',
+				'group' => 'Grouping',
+				'show_contact_info' => array(
+					'title' => 'Contactable',
+					'type' => 'checkbox',
+				),
+			),
+		'admin_box' => false,
+	));
+}
+
 add_filter('sfhiv_users_sort','sfhiv_group_members_sort_by_weight',14);
 function sfhiv_group_members_sort_by_weight($users){
 	$sfhiv_original_user_order = $users;
