@@ -22,8 +22,47 @@ jQuery(document).ready(function(){
 				_.forEach(data['members'],function(member){
 					membersContainer.append(template(member));
 				});
+				container.trigger('sort');
 			}
 			});
+	}).bind('sort',function(event){
+		var container = jQuery(this);
+		var membersContainer = jQuery('.members',container);
+
+		var members = [];
+		jQuery('.sfhiv-member',membersContainer).each(function(){
+			member = jQuery(this);
+			members.push({
+				firstName:member.attr("first-name"),
+				lastName:member.attr("last-name"),
+				weight:jQuery('.weight',member).val(),
+				div:member
+			});
+		});
+
+		members = members.sort(function(a,b){
+			if(a['lastName'] > b['lastName']){
+				return 1;
+			}else if(b['lastName'] > a['lastName']){
+				return -1;
+			}
+			if(a['firstName'] > b['firstName']){
+				return 1;
+			}else if(b['firstName'] > a['firstName']){
+				return -1;
+			}
+			if(a['weight'] > b['weight']){
+				return 1;
+			}else if(b['weight'] > a['weight']){
+				return -1;
+			}
+			return 0;
+		});
+
+		_.forEach(members,function(member){
+			membersContainer.append(member['div']);
+		});
+
 	}).bind('add',function(event){
 		if(!event.user_id) return;
 
@@ -41,6 +80,7 @@ jQuery(document).ready(function(){
 				_.forEach(data['members'],function(member){
 					membersContainer.append(template(member));
 				});
+				container.trigger('sort');
 			}
 			});
 	}).trigger('setup');

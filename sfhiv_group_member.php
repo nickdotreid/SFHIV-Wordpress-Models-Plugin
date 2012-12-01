@@ -96,7 +96,7 @@ function sfhiv_group_members_draw_meta_box(){
 
 	</div>
 	<div class="member-template" style="display:none;">
-		<div id="member-<%= ID %>" class="sfhiv-member member" user-id="<%= ID %>">
+		<div id="member-<%= ID %>" class="sfhiv-member member" user-id="<%= ID %>" first-name="<%= first_name %>" last-name="<%= last_name %>">
 			<a href="http://sfhiv:8888/wp-admin/user-edit.php?user_id=<%= ID %>" class="name"><%= first_name %> <%= last_name %></a>
 			<div class="connection-info">
 				<label class="checkbox">
