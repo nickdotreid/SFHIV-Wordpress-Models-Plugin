@@ -122,7 +122,7 @@ function sfhiv_group_members_draw_meta_box(){
 		<input type="text" class="first-name" name="sfhiv-member-first-name" />
 		<label for="sfhiv-member-last-name">Last Name</label>
 		<input type="text" class="last-name" name="sfhiv-member-last-name" />
-		<input type="submit" class="create-button button" value="Add Member" />
+		<input type="submit" class="create-button button" value="Add New Member" />
 	</div>
 	<?
 }
@@ -154,6 +154,22 @@ function sfhiv_group_members_ajax_get() {
 	echo json_encode(array(
 		"members" => $members,
 		));
+	die();
+}
+
+add_action('wp_ajax_sfhiv_member_add', 'sfhiv_group_members_ajax_add');
+function sfhiv_group_members_ajax_add() {
+	$members = array();
+	if(isset($_POST['group_id']) && isset($_POST['user_id'])){
+		p2p_type( 'group_members' )->connect( $_POST['group_id'], $_POST['user_id'], array() );
+		$user = get_user_by('id',$_POST['user_id']);
+		if($user){
+			$members[] = sfhiv_group_member_get_object($user);
+		}
+	}
+	echo json_encode(array(
+	"members" => $members,
+	));
 	die();
 }
 

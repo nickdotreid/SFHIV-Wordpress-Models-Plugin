@@ -24,6 +24,25 @@ jQuery(document).ready(function(){
 				});
 			}
 			});
+	}).bind('add',function(event){
+		if(!event.user_id) return;
+
+		var container = jQuery(this);
+		var membersContainer = jQuery('.members',container);
+
+		jQuery.post(ajaxurl, {
+			'action':'sfhiv_member_add',
+			'group_id':jQuery("#post_ID").val(),
+			'user_id':event.user_id
+		}, function(response) {
+			data = jQuery.parseJSON(response);
+			var template = container.data("member_template");
+			if(data['members']){
+				_.forEach(data['members'],function(member){
+					membersContainer.append(template(member));
+				});
+			}
+			});
 	}).trigger('setup');
 
 	jQuery('#sfhiv-group-members').delegate('.sfhiv-member .remove','click',function(event){
@@ -49,8 +68,15 @@ jQuery(document).ready(function(){
 			'first_name':jQuery('.first-name',container).val(),
 			'last_name':jQuery('.last-name',container).val()
 		}, function(response) {
+				var data = jQuery.parseJSON(response);
 				button.show();
 				jQuery('input:not(.button)',container).val("");
+				if(data['ID']){
+					jQuery('#sfhiv-group-members').trigger({
+						type:'add',
+						user_id:data['ID']
+					});
+				}
 			});
 	});
 
