@@ -24,7 +24,7 @@ function sfhiv_group_connection_to_users() {
 					'type' => 'checkbox',
 				),
 			),
-#		'admin_box' => false,
+		'admin_box' => false,
 	));
 }
 
@@ -90,6 +90,18 @@ function sfhiv_group_member_metabox(){
 	add_meta_box('sfhiv-group-members','Create New Member','sfhiv_group_members_draw_meta_box',$post_type,'advanced','low');
 }
 
+add_action( 'save_post', 'sfhiv_group_members_save_connection_info' );
+function sfhiv_group_members_save_connection_info($post_ID){
+	if(get_post_type($post_ID) != 'sfhiv_group') return;
+	if(!isset($_POST['sfhiv-group-member'])) return;
+	$connections = $_POST['sfhiv-group-member'];
+	foreach($connections as $id => $connection){
+		foreach($connection as $key => $value ){
+			p2p_update_meta($id,$key,$value);
+		}
+	}
+}
+
 function sfhiv_group_members_draw_meta_box(){
 	?>
 	<div class="members sfhiv-members">
@@ -100,20 +112,20 @@ function sfhiv_group_members_draw_meta_box(){
 			<a href="http://sfhiv:8888/wp-admin/user-edit.php?user_id=<%= ID %>" class="name"><%= first_name %> <%= last_name %></a>
 			<div class="connection-info">
 				<label class="checkbox">
-					<input type="checkbox" name="p2p_meta[<%= ID %>][hide][]" />
+					<input type="checkbox" name="sfhiv-group-member[<%= ID %>][hide][]" />
 					Hide Title
 				</label>
 				<label>
 					Title
-					<input type="text" name="p2p_meta[<%= ID %>][title]" value="<%= title %>" />
+					<input type="text" name="sfhiv-group-member[<%= ID %>][title]" value="<%= title %>" />
 				</label>
 				<label class="checkbox">
-					<input type="checkbox" name="p2p_meta[<%= ID %>][show_contact_info][]" />
+					<input type="checkbox" name="sfhiv-group-member[<%= ID %>][show_contact_info][]" />
 					Show Contact Information
 				</label>
 			</div>
-			<input type="hidden" name="p2p_meta[<%= ID %>][weight]" value="<%= weight %>" />
-			<input type="hidden" name="p2p_meta[<%= ID %>][group]" value="<%= group %>" />
+			<input type="hidden" name="sfhiv-group-member[<%= ID %>][weight]" value="<%= weight %>" />
+			<input type="hidden" name="sfhiv-group-member[<%= ID %>][group]" value="<%= group %>" />
 			<a class="remove" href="#">Remove</a>
 		</div>
 	</div>
