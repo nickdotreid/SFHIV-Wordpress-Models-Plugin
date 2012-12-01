@@ -1,0 +1,37 @@
+#sfhiv-group-members label{
+	display:block;
+	clear:both;
+}
+#sfhiv-group-members input{
+	display:block;
+}
+#sfhiv-group-members .checkbox input{
+	float:left;
+	margin:3px;
+	width:auto;
+}
+
+.sfhiv-member{
+	display:block;
+	float:left;
+	width:170px;
+	height:125px;
+	background-color:#EEE;
+	margin:5px 5px 0px 0px;
+}
+
+.sfhiv-member .checkbox{
+	background-color:transparent;
+}
+
+.sfhiv-member .name{
+	font-size:1.2em;
+	display:block;
+	margin:5px 5px 0px;
+}
+
+.sfhiv-member .connection-info{
+	display:block;
+	margin:5px;
+}
+

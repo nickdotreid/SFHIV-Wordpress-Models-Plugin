@@ -58,9 +58,6 @@ function sfhiv_group_members_sort_by_weight_cmp($a,$b){
 }
 
 function sfhiv_group_has_members($ID=false){
-	if(!$ID){
-		$ID = get_the_ID();
-	}
 	$users = sfhiv_group_get_members($ID);
 	if(count($users)>0){
 		return true;
@@ -74,7 +71,7 @@ function sfhiv_group_get_members($ID = false){
 	}
 	$users = get_users( array(
 	  'connected_type' => 'group_members',
-	  'connected_items' => get_the_ID(),
+	  'connected_items' => $ID,
 		'orderby' => 'display_name',
 	));
 	if(count($users)<1) return array();
@@ -87,14 +84,40 @@ add_action('add_meta_boxes','sfhiv_group_member_metabox');
 function sfhiv_group_member_metabox(){
 	$post_type = get_post_type(get_the_ID());
 	if(!in_array($post_type,array('sfhiv_group'))) return;
+	wp_enqueue_script('sfhiv_underscore_js', plugins_url('assets/js/underscore.min.js',__FILE__));
 	wp_enqueue_script('sfhiv_group_member_js', plugins_url('assets/js/admin-group-members.js',__FILE__),array('jquery'));
 	wp_enqueue_style('sfhiv_group_member_css', plugins_url('assets/css/admin-group-members.css',__FILE__));
-	add_meta_box('sfhiv-create-member','Create New Member','sfhiv_group_members_draw_meta_box',$post_type,'advanced','low');
+	add_meta_box('sfhiv-group-members','Create New Member','sfhiv_group_members_draw_meta_box',$post_type,'advanced','low');
 }
 
 function sfhiv_group_members_draw_meta_box(){
 	?>
-	<div class="sfhiv-new-member">
+	<div class="members sfhiv-members">
+
+	</div>
+	<div class="member-template" style="display:none;">
+		<div id="member-<%= ID %>" class="sfhiv-member member">
+			<a href="http://sfhiv:8888/wp-admin/user-edit.php?user_id=<%= ID %>" class="name"><%= first_name %> <%= last_name %></a>
+			<div class="connection-info">
+				<label class="checkbox">
+					<input type="checkbox" name="p2p_meta[<%= ID %>][hide][]" />
+					Hide Title
+				</label>
+				<label>
+					Title
+					<input type="text" name="p2p_meta[<%= ID %>][title]" value="<%= title %>" />
+				</label>
+				<label class="checkbox">
+					<input type="checkbox" name="p2p_meta[<%= ID %>][show_contact_info][]" />
+					Show Contact Information
+				</label>
+			</div>
+			<input type="hidden" name="p2p_meta[<%= ID %>][weight]" value="<%= weight %>" />
+			<input type="hidden" name="p2p_meta[<%= ID %>][group]" value="<%= group %>" />
+			<a class="remove" href="#">Remove</a>
+		</div>
+	</div>
+	<div id="sfhiv-create-member" class="sfhiv-new-member">
 		<label for="sfhiv-member-first-name">First Name</label>
 		<input type="text" class="first-name" name="sfhiv-member-first-name" />
 		<label for="sfhiv-member-last-name">Last Name</label>
@@ -102,6 +125,36 @@ function sfhiv_group_members_draw_meta_box(){
 		<input type="submit" class="create-button button" value="Add Member" />
 	</div>
 	<?
+}
+
+function sfhiv_group_member_get_object($user){
+	return $member = array(
+		"ID" => $user->ID,
+		"display_name" => $user->display_name,
+		"p2p_id" => $user->p2p_id,
+		"first_name" => get_user_meta($user->ID,"first_name",true),
+		"last_name" => get_user_meta($user->ID,"last_name",true),
+		'hide' => p2p_get_meta($user->p2p_id,'hide',true),
+		'title' => p2p_get_meta($user->p2p_id,'title',true),
+		'weight' => p2p_get_meta($user->p2p_id,'weight',true),
+		'group' => p2p_get_meta($user->p2p_id,'group',true),
+		'show_contact_info' => p2p_get_meta($user->p2p_id,'hide',true),
+		);
+}
+
+add_action('wp_ajax_sfhiv_members_get', 'sfhiv_group_members_ajax_get');
+function sfhiv_group_members_ajax_get() {
+	$members = array();
+	if(isset($_POST['group_id']) && get_post_type($_POST['group_id'])=='sfhiv_group'){
+		$users = sfhiv_group_get_members($_POST['group_id']);
+		foreach($users as $user){
+			$members[] = sfhiv_group_member_get_object($user);
+		}
+	}
+	echo json_encode(array(
+		"members" => $members,
+		));
+	die();
 }
 
 add_action('wp_ajax_sfhiv_member_create', 'sfhiv_group_members_create_new');
