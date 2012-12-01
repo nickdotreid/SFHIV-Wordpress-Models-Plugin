@@ -26,6 +26,19 @@ jQuery(document).ready(function(){
 			});
 	}).trigger('setup');
 
+	jQuery('#sfhiv-group-members').delegate('.sfhiv-member .remove','click',function(event){
+		event.preventDefault();
+		var user = jQuery(this).parents('.sfhiv-member:first');
+		if(confirm("Remove user from group")){
+			jQuery.post(ajaxurl, {
+				'action':'sfhiv_member_remove',
+				'group_id':jQuery("#post_ID").val(),
+				'user_id':user.attr('user-id')
+			});
+			user.remove();
+		}
+	});
+
 	jQuery('#sfhiv-create-member .button').click(function(event){
 		event.preventDefault();
 		var button = jQuery(this);

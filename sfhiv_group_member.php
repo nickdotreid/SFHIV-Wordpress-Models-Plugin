@@ -96,7 +96,7 @@ function sfhiv_group_members_draw_meta_box(){
 
 	</div>
 	<div class="member-template" style="display:none;">
-		<div id="member-<%= ID %>" class="sfhiv-member member">
+		<div id="member-<%= ID %>" class="sfhiv-member member" user-id="<%= ID %>">
 			<a href="http://sfhiv:8888/wp-admin/user-edit.php?user_id=<%= ID %>" class="name"><%= first_name %> <%= last_name %></a>
 			<div class="connection-info">
 				<label class="checkbox">
@@ -154,6 +154,14 @@ function sfhiv_group_members_ajax_get() {
 	echo json_encode(array(
 		"members" => $members,
 		));
+	die();
+}
+
+add_action('wp_ajax_sfhiv_member_remove', 'sfhiv_group_members_ajax_remove');
+function sfhiv_group_members_ajax_remove() {
+	if(isset($_POST['group_id']) && isset($_POST['user_id'])){
+		p2p_type( 'group_members' )->disconnect( $_POST['group_id'], $_POST['user_id'] );
+	}
 	die();
 }
 
