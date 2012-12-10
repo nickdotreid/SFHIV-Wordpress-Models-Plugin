@@ -68,7 +68,7 @@ function sfhiv_create_study_categories() {
 
 add_action( 'pre_get_posts', 'sfhiv_study_query_top_level_only', 5 );
 function sfhiv_study_query_top_level_only( $query ) {
-	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_study' ) return;
+	if ( is_admin() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] != 'sfhiv_study' ) return;
 	if($query->query_vars['post_parent']) return;
 	if($query->is_single) return;
 	if(!isset($query->query_vars['child_of']))	$query->query_vars['post_parent'] = 0;
@@ -76,7 +76,7 @@ function sfhiv_study_query_top_level_only( $query ) {
 
 add_action( 'pre_get_posts', 'sfhiv_study_orderby_menu_order', 5 );
 function sfhiv_study_orderby_menu_order( $query ) {
-	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_study' ) return;
+	if ( is_admin() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] != 'sfhiv_study' ) return;
 	$query->set('orderby','menu_order');
 	$query->set('order','ASC');
 }

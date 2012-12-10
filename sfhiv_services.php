@@ -128,7 +128,7 @@ function sfhiv_add_population_tag(){
 
 add_action( 'pre_get_posts', 'sfhiv_service_order_query', 5 );
 function sfhiv_service_order_query( $query ) {
-	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_service' ) return;
+	if ( is_admin() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] != 'sfhiv_service' ) return;
 	$query->set( 'orderby', 'title' );
 	$query->set( 'order', 'ASC' );
 }

@@ -202,7 +202,7 @@ function sfhiv_event_tax_query_is_upcoming($que){
 
 add_action('parse_query','sfhiv_event_query_set_vars');
 function sfhiv_event_query_set_vars($query){
-	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
+	if ( is_admin() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
 	if(isset($query->query_vars['sfhiv_event_selection'])) return;
 	if(sfhiv_event_query_is_upcoming($query)){
 		$query->set("sfhiv_event_selection","future");
@@ -212,7 +212,7 @@ function sfhiv_event_query_set_vars($query){
 
 add_action( 'pre_get_posts', 'sfhiv_event_order_query', 5 );
 function sfhiv_event_order_query( $query ) {
-	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
+	if ( is_admin() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
     $query->set( 'meta_key', 'sfhiv_event_start' );
 	$query->set( 'orderby', 'meta_value_num' );
 	$query->set( 'order', 'ASC' );
@@ -220,7 +220,7 @@ function sfhiv_event_order_query( $query ) {
 
 add_action( 'pre_get_posts', 'sfhiv_event_query_update', 7 );
 function sfhiv_event_query_update($query){
-	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
+	if ( is_admin() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] != 'sfhiv_event' ) return;
 	
 	remove_action( 'pre_get_posts', 'sfhiv_event_query_update', 7 );
 	remove_action('parse_query','sfhiv_event_query_set_vars');

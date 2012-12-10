@@ -81,7 +81,7 @@ function sfhiv_add_role_category(){
 
 add_action( 'pre_get_posts', 'sfhiv_document_query_top_level_only', 5 );
 function sfhiv_document_query_top_level_only( $query ) {
-    if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_document' ) return;
+    if ( is_admin() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] != 'sfhiv_document' ) return;
 	if($query->query_vars['post_parent']) return;
 	if($query->is_single) return;
 	if(!isset($query->query_vars['child_of']))	$query->query_vars['post_parent'] = 0;
@@ -90,7 +90,7 @@ function sfhiv_document_query_top_level_only( $query ) {
 
 add_action( 'pre_get_posts', 'sfhiv_document_query_sort_by_date', 10 );
 function sfhiv_document_query_sort_by_date($query){
-	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_document' ) return;
+	if ( is_admin() || !isset($query->query_vars['post_type']) || $query->query_vars['post_type'] != 'sfhiv_document' ) return;
 	
 	$query->query_vars['orderby'] = 'date,ID';
 	$query->query_vars['order'] = 'DESC';
