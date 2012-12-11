@@ -114,11 +114,19 @@ function sfhiv_group_members_save_connection_info($post_ID){
 function sfhiv_group_members_draw_meta_box(){
 	?>
 	<div id="sfhiv-create-member" class="sfhiv-new-member">
-		<label for="sfhiv-member-first-name">First Name</label>
-		<input type="text" class="first-name" name="sfhiv-member-first-name" />
-		<label for="sfhiv-member-last-name">Last Name</label>
-		<input type="text" class="last-name" name="sfhiv-member-last-name" />
-		<input type="submit" class="create-button button" value="Add New Member" />
+		<div style="float:left;">
+			<label for="sfhiv-member-first-name">First Name</label>
+			<input type="text" class="first-name" name="sfhiv-member-first-name" />
+		</div>
+		<div style="float:left;">
+			<label for="sfhiv-member-last-name">Last Name</label>
+			<input type="text" class="last-name" name="sfhiv-member-last-name" />
+		</div>
+		<div style="float:left">
+			<label>&nbsp;</label>
+			<input type="submit" class="create-button button" value="Add New Member" />
+		</div>
+		<br style="clear:both;" />
 	</div>
 	<?
 }
