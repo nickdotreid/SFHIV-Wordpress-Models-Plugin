@@ -113,31 +113,6 @@ function sfhiv_group_members_save_connection_info($post_ID){
 
 function sfhiv_group_members_draw_meta_box(){
 	?>
-	<div class="members sfhiv-members">
-
-	</div>
-	<div class="member-template" style="display:none;">
-		<div id="member-<%= ID %>" class="sfhiv-member member" user-id="<%= ID %>" first-name="<%= first_name %>" last-name="<%= last_name %>">
-			<a href="http://sfhiv:8888/wp-admin/user-edit.php?user_id=<%= ID %>" class="name"><%= first_name %> <%= last_name %></a>
-			<div class="connection-info">
-				<label class="checkbox">
-					<input type="checkbox" name="sfhiv-group-member[<%= ID %>][hide][]" />
-					Hide Title
-				</label>
-				<label>
-					Title
-					<input type="text" name="sfhiv-group-member[<%= ID %>][title]" value="<%= title %>" />
-				</label>
-				<label class="checkbox">
-					<input type="checkbox" name="sfhiv-group-member[<%= ID %>][show_contact_info][]" />
-					Show Contact Information
-				</label>
-			</div>
-			<input type="hidden" name="sfhiv-group-member[<%= ID %>][weight]" value="<%= weight %>" />
-			<input type="hidden" name="sfhiv-group-member[<%= ID %>][group]" value="<%= group %>" />
-			<a class="remove" href="#">Remove</a>
-		</div>
-	</div>
 	<div id="sfhiv-create-member" class="sfhiv-new-member">
 		<label for="sfhiv-member-first-name">First Name</label>
 		<input type="text" class="first-name" name="sfhiv-member-first-name" />
@@ -163,21 +138,6 @@ function sfhiv_group_member_get_object($user){
 		);
 }
 
-add_action('wp_ajax_sfhiv_members_get', 'sfhiv_group_members_ajax_get');
-function sfhiv_group_members_ajax_get() {
-	$members = array();
-	if(isset($_POST['group_id']) && get_post_type($_POST['group_id'])=='sfhiv_group'){
-		$users = sfhiv_group_get_members($_POST['group_id']);
-		foreach($users as $user){
-			$members[] = sfhiv_group_member_get_object($user);
-		}
-	}
-	echo json_encode(array(
-		"members" => $members,
-		));
-	die();
-}
-
 add_action('wp_ajax_sfhiv_member_add', 'sfhiv_group_members_ajax_add');
 function sfhiv_group_members_ajax_add() {
 	$members = array();
@@ -191,14 +151,6 @@ function sfhiv_group_members_ajax_add() {
 	echo json_encode(array(
 	"members" => $members,
 	));
-	die();
-}
-
-add_action('wp_ajax_sfhiv_member_remove', 'sfhiv_group_members_ajax_remove');
-function sfhiv_group_members_ajax_remove() {
-	if(isset($_POST['group_id']) && isset($_POST['user_id'])){
-		p2p_type( 'group_members' )->disconnect( $_POST['group_id'], $_POST['user_id'] );
-	}
 	die();
 }
 
