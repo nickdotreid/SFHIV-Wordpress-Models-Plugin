@@ -24,7 +24,10 @@ function sfhiv_group_connection_to_users() {
 					'type' => 'checkbox',
 				),
 			),
-		'admin_box' => false,
+		'admin_box' => 	array(
+			'show' => 'any',
+			'context' => 'advanced'
+		),
 	));
 }
 
@@ -77,6 +80,14 @@ function sfhiv_group_get_members($ID = false){
 	if(count($users)<1) return array();
 	sfhiv_users_sort($users);
 	return $users;
+}
+
+add_filter( 'p2p_admin_box_show', 'sfhiv_show_user_meta_box', 10, 3 );
+function sfhiv_show_user_meta_box( $show, $ctype, $post ){
+	if($ctype->name == 'group_members'){
+		return true;
+	}
+	return $show;
 }
 
 /*** ADD MEMBER META BOX ***/
