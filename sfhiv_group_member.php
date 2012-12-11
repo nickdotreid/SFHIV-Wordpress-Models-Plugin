@@ -164,6 +164,7 @@ function sfhiv_group_members_create_new() {
 	}
 	$user_ID = wp_insert_user(array(
 		'user_login' => sfhiv_group_member_make_username($_POST['first_name']." ".$_POST['last_name']),
+		'user_pass' => sfhiv_group_member_make_password(),
 		'first_name' => $_POST['first_name'],
 		'last_name' => $_POST['last_name'],
 		));
@@ -179,7 +180,7 @@ function sfhiv_group_member_make_username($name,$append=0){
 	}
 	$name = strtolower($name);
 	$name = str_replace(' ','.',$name);
-	preg_replace("/[^A-Za-z0-9\. ]/", '', $string);
+	preg_replace("/[^A-Za-z0-9\. ]/", '', $name);
 	#check if name is unique -- otherwise append random numbers
 	$users = get_users('search='.$name);
 	if(count($users) > 0){
@@ -187,6 +188,18 @@ function sfhiv_group_member_make_username($name,$append=0){
 		return sfhiv_group_member_make_username($name,$append);
 	}
 	return $name;
+}
+
+function sfhiv_group_member_make_password($length = 8) {
+    # from http://stackoverflow.com/questions/6101956/generating-a-random-password-in-php 
+	$alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+    $pass = array(); //remember to declare $pass as an array
+    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+    for ($i = 0; $i < $length; $i++) {
+        $n = rand(0, $alphaLength);
+        $pass[] = $alphabet[$n];
+    }
+    return implode($pass); //turn the array into a string
 }
 
 ?>
