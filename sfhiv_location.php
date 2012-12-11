@@ -126,10 +126,10 @@ function sfhiv_location_address_form($post,$args=array()){
 		<legend>Address</legend>
 		<input type="hidden" name="<?=$args['prefix'];?>[latitude]" value="<?=$latitude;?>" />
 		<input type="hidden" name="<?=$args['prefix'];?>[longitude]" value="<?=$longitude;?>" />
-		<label for="<?=$args['prefix'];?>-room">Room</label>
-		<input id="<?=$args['prefix'];?>-room" type="text" name="<?=$args['prefix'];?>[room]" value="<?=$room;?>" />
 		<label for="<?=$args['prefix'];?>-address">Address</label>
 		<input id="<?=$args['prefix'];?>-address" type="text" name="<?=$args['prefix'];?>[address]" value="<?=$address;?>" />
+		<label for="<?=$args['prefix'];?>-room">Room</label>
+		<input id="<?=$args['prefix'];?>-room" type="text" name="<?=$args['prefix'];?>[room]" value="<?=$room;?>" />
 		<label for="<?=$args['prefix'];?>-zip_code">Postal Code</label>
 		<input id="<?=$args['prefix'];?>-zip_code" type="text" name="<?=$args['prefix'];?>[zip_code]" value="<?=$zip_code;?>" />
 		<label for="<?=$args['prefix'];?>-city">City</label>
