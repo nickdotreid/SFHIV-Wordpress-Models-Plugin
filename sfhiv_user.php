@@ -46,7 +46,7 @@ function sfhiv_users_sort(&$users){
 
 add_filter('sfhiv_users_sort','sfhiv_users_sort_by_name',1);
 function sfhiv_users_sort_by_name($users){
-	usort($users,sfhiv_users_sort_by_name_cmp);
+	usort($users,'sfhiv_users_sort_by_name_cmp');
 	return $users;
 }
 
