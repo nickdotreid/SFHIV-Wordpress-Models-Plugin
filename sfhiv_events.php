@@ -22,7 +22,7 @@ function sfhiv_add_events_type(){
 		'has_archive' => true,
 		'hierarchical' => true,
 		'rewrite' => array(
-			'slug' => 'events',
+			'slug' => 'meeting',
 			'feeds' => false,
 		),
 		'capability_type' => 'page',
@@ -37,7 +37,7 @@ function sfhiv_add_events_type(){
 	);
 }
 
-add_filter( 'cmb_meta_boxes', 'sfhiv_event_add_unique_page_metabox', 21 );
+add_filter( 'cmb_meta_boxes', 'sfhiv_event_add_unique_page_metabox', 10 );
 function sfhiv_event_add_unique_page_metabox( $meta_boxes ){
 	$meta_boxes[] = array(
 		'id'         => 'sfhiv_event_unique_page',
@@ -58,6 +58,33 @@ function sfhiv_event_add_unique_page_metabox( $meta_boxes ){
 	return $meta_boxes;
 }
 
+add_filter( 'cmb_meta_boxes', 'sfhiv_event_custom_title', 15 );
+function sfhiv_event_custom_title( $meta_boxes ){
+	$meta_boxes[] = array(
+		'id'         => 'sfhiv_event_custom_title',
+		'title'      => 'Custom Title',
+		'pages'      => array( 'sfhiv_event' ),
+		'context'    => 'normal',
+		'priority'   => 'high',
+		'show_names' => true, // Show field names on the left
+		'fields' => array(
+			array(
+				'name' => 'Custom Title',
+				'desc' => 'Custom title to replace automatically generated title',
+				'id'   => 'sfhiv_event_custom_title',
+				'type' => 'text',
+			),
+			array(
+				'name' => 'Use Custom Title',
+				'desc' => 'Use custom title in meeting title',
+				'id'   => 'sfhiv_event_custom_title_checkbox',
+				'type' => 'checkbox',
+			),
+		)
+	);
+	return $meta_boxes;
+}
+
 add_action( 'the_posts', 'sfhiv_event_get_groups', 7, 2 );
 function sfhiv_event_get_groups($posts,$query){
 	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_event' ) return $posts;
@@ -67,7 +94,7 @@ function sfhiv_event_get_groups($posts,$query){
 
 add_filter('post_type_link','sfhiv_event_link_filter',2,2);
 function sfhiv_event_link_filter($link,$post){
-	if(is_admin() || get_post_type($post->ID) != 'sfhiv_event') return $link;
+	if(get_post_type($post->ID) != 'sfhiv_event') return $link;
 	$unique = get_post_meta($post->ID,'sfhiv_event_unique_page_checkbox',true);
 	if(!$unique){
 		$groups = new WP_Query( array(
@@ -146,6 +173,21 @@ function sfhiv_event_get_duration($post_ID){
 	$end = get_post_meta($post_ID,'sfhiv_event_end',true);
 	return $end - $start;
 }
+
+add_filter('single_post_title', 'sfhiv_event_update_title', 2, 2);
+add_filter('the_title', 'sfhiv_event_update_title', 2, 2);
+function sfhiv_event_update_title($title, $post_ID){
+	if(get_post_type($post_ID) != 'sfhiv_event') return $title;
+	if(get_post_meta($post_ID,'sfhiv_event_custom_title_checkbox',true)) return get_post_meta($post_ID,'sfhiv_event_custom_title',true);
+	$title = "Meeting";
+	$date = sfhiv_event_get_start_time($post_ID);
+	if($date){
+		$month = date("F",$date);
+		return $month." ".$title;
+	}
+	return $title;
+}
+
 
 add_action('init','sfhiv_add_event_category');
 function sfhiv_add_event_category(){
