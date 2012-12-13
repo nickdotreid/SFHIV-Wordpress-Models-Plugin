@@ -77,6 +77,13 @@ function sfhiv_service_load_providers($posts,$query){
 	return $posts;
 }
 
+add_filter( 'the_posts', 'sfhiv_service_provider_load_services', 10, 2);
+function sfhiv_service_provider_load_services($posts,$query){
+	if ( is_admin() || $query->query_vars['post_type'] != 'sfhiv_provider' ) return $posts;
+	p2p_type( 'provider_services' )->each_connected( $query, array(), 'services' );
+	return $posts;
+}
+
 include_once("sfhiv_service_hours.php");
 include_once("sfhiv_services_time_taxonomy.php");
 include_once("sfhiv_services_day_taxonomy.php");
