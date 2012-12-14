@@ -19,6 +19,7 @@ function sfhiv_add_services_type(){
 				'menu_name' => 'Services',
 			),
 		'public' => true,
+		'exclude_from_search' => true,
 		'has_archive' => true,
 		'rewrite' => array(
 			'slug' => 'services',

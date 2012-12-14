@@ -19,6 +19,7 @@ function sfhiv_add_location_type(){
 				'menu_name' => 'Locations',
 			),
 		'public' => true,
+		'exclude_from_search' => true,
 		'has_archive' => false,
 		'hierarchical' => false,
 		'capability_type' => 'page',

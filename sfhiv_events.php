@@ -19,6 +19,7 @@ function sfhiv_add_events_type(){
 				'menu_name' => 'Meetings',
 			),
 		'public' => true,
+		'exclude_from_search' => true,
 		'has_archive' => true,
 		'hierarchical' => true,
 		'rewrite' => array(

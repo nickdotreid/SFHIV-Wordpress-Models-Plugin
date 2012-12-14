@@ -261,7 +261,7 @@ function sfhiv_service_hour_ajax_hour_form() {
 	die();
 }
 
-add_action( 'save_post', 'sfhiv_service_hour_time_save', 200 );
+add_action( 'save_post', 'sfhiv_service_hour_time_save', 200, 2 );
 function sfhiv_service_hour_time_save($post_ID,$post){
 	if(get_post_type($post_ID) != 'sfhiv_service') return;
 	$service_hours = new WP_Query( array(
