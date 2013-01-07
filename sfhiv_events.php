@@ -33,7 +33,6 @@ function sfhiv_add_events_type(){
 			'sfhiv_group_category',
 			'sfhiv_event_category',
 			),
-		'register_meta_box_cb' => 'sfhiv_add_events_meta_boxes',
 		)
 	);
 }
