@@ -215,9 +215,13 @@ function sfhiv_location_location_list_draw($connected_ids,$args=array()){
 }
 
 function sfhiv_location_list_item($location,$args = array()){
+	global $post;
+	$orgpost = $post;
+	$post = $location;
 	?>
-	<option <?	if($args['selected']) echo 'selected="true"';	?> value="<?=$location->ID;?>"><?=apply_filters('the_title',$location->post_title);?></option>
+	<option <?	if(isset($args['selected']) and $args['selected']) echo 'selected="true"';	?> value="<?=$location->ID;?>"><?=the_title();?></option>
 	<?
+	$post = $orgpost;
 }
 
 add_action('wp_ajax_sfhiv_location_form', 'sfhiv_location_ajax_location_form');
